@@ -119,3 +119,5 @@
 6. 涉及风险内容时已添加 `InvestRiskNotice`
 7. scope 正确（`current_a_share_path` / `bridge_only` / `advanced_boundary`）
 8. 无具体买卖建议、无未验证数据
+9. **标签闭合检查**：所有 `BaseCallout`/`ClientOnly` 成对闭合，自闭合组件以 `/>` 结尾，无重复闭标签
+10. **构建验证**：执行 `npx vitepress build docs` 确认构建通过

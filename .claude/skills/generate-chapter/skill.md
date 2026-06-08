@@ -142,6 +142,49 @@ PE 是市盈率，也就是股价除以每股收益。
 - 涉及市场数据、行情数据、财务数据时，必须附带 `BaseDataSource`。
 - `VizECharts` 和 `VizMermaid` 必须包裹在 `<ClientOnly>` 中。
 
+#### 组件标签闭合规则（强制）
+
+Vue 组件在 Markdown 中分两类，标签闭合方式不同：
+
+**容器组件（必须有开标签和闭标签）**：
+
+| 组件 | 正确写法 |
+|------|----------|
+| `BaseCallout` | `<BaseCallout type="tip" title="标题">内容</BaseCallout>` |
+| `ClientOnly` | `<ClientOnly>...</ClientOnly>` |
+| `InvestRiskNotice` | 属性都在开标签中，但仍需闭合 `<InvestRiskNotice ... />` 或 `<InvestRiskNotice ... ></InvestRiskNotice>` |
+| `InvestScenarioTabs` | `<InvestScenarioTabs ... />` |
+
+**自闭合组件（用 `/>` 结束，无内容体）**：
+
+| 组件 | 正确写法 |
+|------|----------|
+| `InvestTerm` | `<InvestTerm id="pe" term="市盈率" mode="tooltip" />` |
+| `VizChart` | `<VizChart type="line" ... />` |
+| `VizFormula` | `<VizFormula ... />` |
+| `VizTimeline` | `<VizTimeline ... />` |
+| `VizProcessFlow` | `<VizProcessFlow ... />` |
+| `VizECharts` | `<VizECharts ... />`（包裹在 ClientOnly 中） |
+| `VizMermaid` | `<VizMermaid ... />`（包裹在 ClientOnly 中） |
+| `BaseCompareMatrix` | `<BaseCompareMatrix ... />` |
+| `BaseDataSource` | `<BaseDataSource ... />` |
+| `LearnQuiz` | `<LearnQuiz ... />` |
+| `LearnReflection` | `<LearnReflection ... />` |
+| `LearnCaseStudy` | `<LearnCaseStudy ... />` |
+| `LearnProgress` | `<LearnProgress ... />` |
+| `InvestMetricBadge` | `<InvestMetricBadge ... />` |
+| `InvestSecurityCard` | `<InvestSecurityCard ... />` |
+| `InvestFinancialReport` | `<InvestFinancialReport ... />` |
+| `InvestPortfolio` | `<InvestPortfolio ... />` |
+| `InvestRiskNotice` | `<InvestRiskNotice kind="market" level="high" ... />` |
+
+**标签闭合检查清单**（写入每个文件后必须执行）：
+
+1. 统计文件中每个组件名的开标签数量，必须等于闭标签数量
+2. `BaseCallout` 和 `ClientOnly` 必须成对出现（`<BaseCallout ...>` 对应 `</BaseCallout>`）
+3. 自闭合组件必须用 `/>` 结尾，不能写成 `<InvestTerm ...>` 不带斜杠
+4. 禁止出现连续两个相同的闭标签（如 `</BaseCallout>\n</BaseCallout>`）
+
 风险提示规则：
 
 涉及以下内容时必须使用 `InvestRiskNotice`：
@@ -219,15 +262,26 @@ chart_slots: []
 
 ### 10. 生成后校验
 
-生成完成后做最小必要校验：
+生成完成后必须逐项校验，**标签闭合检查为最高优先级**：
 
-- YAML frontmatter 可解析。
-- 章节中未出现未声明组件。
-- 章节中未使用未声明图表槽位。
-- `first_terms` 均有首次解释。
-- 非 `first_terms` 的已知术语使用 `<Term id="..." />` 引用。
-- 没有具体买卖建议。
-- VitePress 构建命令可运行时，执行 `npm run docs:build`。
+1. **标签闭合检查**（必须执行，构建失败最常见原因）：
+   - 统计每个文件中所有组件标签的开闭数量，开标签数必须等于闭标签数
+   - 重点检查 `BaseCallout`、`ClientOnly` 的 `</BaseCallout>`、`</ClientOnly>` 是否全部匹配
+   - 自闭合组件（`InvestTerm`、`VizChart`、`VizFormula`、`VizTimeline`、`VizProcessFlow`、`BaseCompareMatrix`、`BaseDataSource`、`LearnQuiz`、`LearnReflection`、`LearnCaseStudy`、`LearnProgress`、`InvestMetricBadge`、`InvestSecurityCard`、`InvestFinancialReport`、`InvestPortfolio`、`InvestRiskNotice`、`InvestScenarioTabs`）必须以 `/>` 结尾
+   - `VizECharts` 和 `VizMermaid` 必须包裹在 `<ClientOnly>...</ClientOnly>` 中
+
+2. 内容校验：
+   - YAML frontmatter 可解析。
+   - 章节中未出现未声明组件。
+   - 章节中未使用未声明图表槽位。
+   - `first_terms` 均有首次解释。
+   - 非 `first_terms` 的已知术语使用 `<InvestTerm id="..." />` 引用。
+   - 没有具体买卖建议。
+   - 没有未经验证的市场数据。
+
+3. 构建验证：
+   - VitePress 构建命令可运行时，执行 `npm run docs:build`（项目使用 docs 目录，命令为 `npx vitepress build docs`）。
+   - 构建失败时，根据错误信息定位并修复，修复后重新构建直到通过。
 
 ## 批次输出报告
 

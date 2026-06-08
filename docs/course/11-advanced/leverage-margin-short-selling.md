@@ -24,6 +24,16 @@ chart_slots: [leverage-risk-flow]
 
 一个简单示例：你有 10 万元本金。不加杠杆：买入 10 万元股票，涨 10% 赚 1 万。加 1 倍杠杆（借入 10 万）：买入 20 万元股票，涨 10% 赚 2 万——收益翻倍。但如果跌 10%，亏损也是 2 万（本金的 20%）。如果跌 50%，不加杠杆亏 5 万，加杠杆亏 10 万——**本金全亏光**。
 
+<VizProcessFlow
+  aria-label="杠杆放大收益与亏损的双向路径"
+  :steps="[
+    { id: 'principal', title: '本金 10 万元', description: '不加杠杆时，盈亏就是本金比例的涨跌' },
+    { id: 'borrow', title: '借入资金 × 杠杆倍数', description: '杠杆放大了你控制的资产规模——但也放大了波动' },
+    { id: 'up', title: '上涨：收益放大', description: '涨 10% → 1倍杠杆赚 2 万（20%回报），不加杠杆赚 1 万（10%）' },
+    { id: 'down', title: '下跌：亏损放大', description: '跌 50% → 1倍杠杆亏 10 万，本金全部亏光，触发强制平仓' }
+  ]"
+/>
+
 ## 融资融券：A 股的杠杆工具
 
 <InvestTerm id="margin-trading" term="融资交易" mode="tooltip" />
