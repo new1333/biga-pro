@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { EChartsOption, EChartsType } from 'echarts'
+import { useData } from 'vitepress'
 
 /**
  * Markdown 用法：
@@ -34,6 +35,16 @@ const vizChartExampleData = [
   { date: '2024-Q2', value: 12 },
   { date: '2024-Q3', value: 11 }
 ]
+
+const { isDark } = useData()
+
+const darkColors = ['#60a5fa', '#4ade80', '#fbbf24', '#f87171', '#a78bfa', '#2dd4bf']
+const lightColors = ['#2f6fdd', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6']
+
+function resolveCssVar(name: string): string {
+  if (typeof document === 'undefined') return '#666'
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#666'
+}
 
 const props = withDefaults(
   defineProps<{
@@ -78,12 +89,27 @@ function valueOf(row: Record<string, unknown>, key: string) {
 }
 
 function buildOption(): EChartsOption {
+  const dark = isDark.value
+  const textColor = resolveCssVar('--vp-c-text-2')
+  const dividerColor = resolveCssVar('--vp-c-divider')
+  const seriesColors = dark ? darkColors : lightColors
+
+  const baseTooltip = {
+    backgroundColor: dark ? '#1e1e2e' : '#fff',
+    borderColor: dark ? '#3a3a4a' : '#e5e7eb',
+    textStyle: { color: dark ? '#e2e8f0' : '#334155' }
+  }
+
   const primaryY = props.yKeys[0]
 
   if (props.type === 'pie') {
     return {
-      title: props.title ? { text: props.title, left: 'center' } : undefined,
-      tooltip: { trigger: 'item' },
+      title: props.title
+        ? { text: props.title, left: 'center', textStyle: { color: textColor } }
+        : undefined,
+      color: seriesColors,
+      tooltip: { trigger: 'item', ...baseTooltip },
+      legend: { textStyle: { color: textColor } },
       series: [
         {
           type: 'pie',
@@ -99,20 +125,25 @@ function buildOption(): EChartsOption {
   }
 
   return {
-    title: props.title ? { text: props.title, left: 0, textStyle: { fontSize: 15 } } : undefined,
-    color: ['#2f6fdd', '#16a34a', '#f59e0b', '#ef4444'],
-    tooltip: { trigger: 'axis' },
-    legend: { top: props.title ? 30 : 0 },
+    title: props.title
+      ? { text: props.title, left: 0, textStyle: { fontSize: 15, color: textColor } }
+      : undefined,
+    color: seriesColors,
+    tooltip: { trigger: 'axis', ...baseTooltip },
+    legend: { top: props.title ? 30 : 0, textStyle: { color: textColor } },
     grid: { left: 44, right: 18, top: props.title ? 70 : 40, bottom: 38 },
     xAxis: {
       type: 'category',
       data: props.data.map((row) => String(row[props.xKey] ?? '')),
-      axisLabel: { color: 'var(--vp-c-text-2)' }
+      axisLabel: { color: textColor },
+      axisLine: { lineStyle: { color: dividerColor } },
+      axisTick: { lineStyle: { color: dividerColor } }
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: 'var(--vp-c-text-2)' },
-      splitLine: { lineStyle: { color: 'var(--vp-c-divider)' } }
+      axisLabel: { color: textColor },
+      splitLine: { lineStyle: { color: dividerColor } },
+      axisLine: { lineStyle: { color: dividerColor } }
     },
     series: props.yKeys.map((key) => ({
       name: key,
@@ -150,6 +181,10 @@ watch(
   () => void nextTick(renderChart),
   { deep: true }
 )
+
+watch(isDark, () => {
+  if (hasData.value) void nextTick(renderChart)
+})
 
 onMounted(() => {
   mounted = true

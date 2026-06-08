@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { EChartsOption, EChartsType } from 'echarts'
+import { useData } from 'vitepress'
 
 /**
  * Markdown 用法：
@@ -32,6 +33,8 @@ const vizEChartsExampleOption: EChartsOption = {
   series: [{ type: 'line', data: [1, 2] }]
 }
 
+const { isDark } = useData()
+
 const props = withDefaults(
   defineProps<{
     option?: EChartsOption
@@ -45,7 +48,7 @@ const props = withDefaults(
   }>(),
   {
     option: () => ({}),
-    theme: 'light',
+    theme: undefined,
     height: 360,
     renderer: 'canvas',
     autoresize: true,
@@ -54,6 +57,11 @@ const props = withDefaults(
     source: undefined
   }
 )
+
+const resolvedTheme = computed(() => {
+  if (props.theme) return props.theme
+  return isDark.value ? 'dark' : 'light'
+})
 
 const chartEl = ref<HTMLElement | null>(null)
 const normalizedHeight = computed(() =>
@@ -70,7 +78,7 @@ async function renderChart() {
   echartsModule ??= await import('echarts')
   if (!mounted || !chartEl.value) return
 
-  chart ??= echartsModule.init(chartEl.value, props.theme, { renderer: props.renderer })
+  chart ??= echartsModule.init(chartEl.value, resolvedTheme.value, { renderer: props.renderer })
   chart.setOption(
     {
       aria: { enabled: true, label: { description: props.ariaLabel } },
@@ -102,7 +110,7 @@ watch(
 )
 
 watch(
-  () => [props.theme, props.renderer],
+  [resolvedTheme, () => props.renderer],
   () => {
     disposeChart()
     void nextTick(renderChart)

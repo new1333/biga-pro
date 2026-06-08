@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { EChartsType } from 'echarts'
+import { useData } from 'vitepress'
 
 /**
  * Markdown 用法：
@@ -43,6 +44,16 @@ const peChartExampleData: PEChartPoint[] = [
   { label: '2024-Q3', pe: 13.9, industryPe: 15.8, marketPe: 14.7 }
 ]
 
+const { isDark } = useData()
+
+const darkSeriesColors = ['#60a5fa', '#4ade80', '#fbbf24']
+const lightSeriesColors = ['#2f6fdd', '#16a34a', '#f59e0b']
+
+function resolveCssVar(name: string): string {
+  if (typeof document === 'undefined') return '#666'
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#666'
+}
+
 const props = withDefaults(
   defineProps<{
     data?: PEChartPoint[]
@@ -61,7 +72,7 @@ const props = withDefaults(
     title: '市盈率（PE）趋势',
     caption: '',
     height: 320,
-    theme: 'light',
+    theme: undefined,
     renderer: 'canvas',
     emptyText: '暂无市盈率数据',
     ariaLabel: '',
@@ -69,6 +80,11 @@ const props = withDefaults(
     showLegend: true
   }
 )
+
+const resolvedTheme = computed(() => {
+  if (props.theme) return props.theme
+  return isDark.value ? 'dark' : 'light'
+})
 
 const chartEl = ref<HTMLElement | null>(null)
 const normalizedHeight = computed(() =>
@@ -120,6 +136,11 @@ function hasSeries(key: keyof Pick<PEChartPoint, 'pe' | 'industryPe' | 'marketPe
 }
 
 function buildOption() {
+  const dark = isDark.value
+  const textColor = resolveCssVar('--vp-c-text-2')
+  const dividerColor = resolveCssVar('--vp-c-divider')
+  const seriesColors = dark ? darkSeriesColors : lightSeriesColors
+
   const categories = props.data.map((point) => point.label)
   const series = []
 
@@ -165,33 +186,39 @@ function buildOption() {
   }
 
   return {
-    color: ['#2f6fdd', '#16a34a', '#f59e0b'],
+    color: seriesColors,
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value: unknown) => formatPeValue(value)
+      valueFormatter: (value: unknown) => formatPeValue(value),
+      backgroundColor: dark ? '#1e1e2e' : '#fff',
+      borderColor: dark ? '#3a3a4a' : '#e5e7eb',
+      textStyle: { color: dark ? '#e2e8f0' : '#334155' }
     },
     legend: {
       show: props.showLegend,
       top: 0,
-      textStyle: { color: 'var(--vp-c-text-2)' }
+      textStyle: { color: textColor }
     },
     grid: { left: 44, right: 18, top: props.showLegend ? 48 : 18, bottom: 42 },
     xAxis: {
       type: 'category',
       boundaryGap: false,
       data: categories,
-      axisLabel: { color: 'var(--vp-c-text-2)' },
-      axisLine: { lineStyle: { color: 'var(--vp-c-divider)' } }
+      axisLabel: { color: textColor },
+      axisLine: { lineStyle: { color: dividerColor } },
+      axisTick: { lineStyle: { color: dividerColor } }
     },
     yAxis: {
       type: 'value',
       name: '倍',
+      nameTextStyle: { color: textColor },
       min: 0,
       axisLabel: {
-        color: 'var(--vp-c-text-2)',
+        color: textColor,
         formatter: '{value}'
       },
-      splitLine: { lineStyle: { color: 'var(--vp-c-divider)' } }
+      splitLine: { lineStyle: { color: dividerColor } },
+      axisLine: { lineStyle: { color: dividerColor } }
     },
     series,
     aria: {
@@ -209,7 +236,7 @@ async function renderChart() {
   echartsModule ??= await import('echarts')
   if (!isMounted || !chartEl.value) return
 
-  chart ??= echartsModule.init(chartEl.value, props.theme, {
+  chart ??= echartsModule.init(chartEl.value, resolvedTheme.value, {
     renderer: props.renderer
   })
   chart.setOption(buildOption(), true)
@@ -240,12 +267,16 @@ watch(
 )
 
 watch(
-  () => [props.theme, props.renderer],
+  [resolvedTheme, () => props.renderer],
   () => {
     disposeChart()
     void nextTick(renderChart)
   }
 )
+
+watch(isDark, () => {
+  if (hasPeData.value) void nextTick(renderChart)
+})
 
 onMounted(() => {
   isMounted = true
