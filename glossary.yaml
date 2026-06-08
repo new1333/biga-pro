@@ -1,0 +1,2378 @@
+version: 1
+reference_syntax: '<Term id="pe" />'
+terms:
+  - id: securities
+    name: "证券"
+    category: "基础概念"
+    difficulty: beginner
+    description: "代表一定财产权利或收益权利的金融凭证，股票、债券、基金份额等都属于证券。"
+    aliases: ["Security", "有价证券"]
+    prerequisites: []
+
+  - id: stock
+    name: "股票"
+    category: "基础概念"
+    difficulty: beginner
+    description: "上市公司发行的所有权凭证，持有人通常享有分红、表决和价格变动带来的权益或风险。"
+    aliases: ["股份", "普通股", "Stock", "Share"]
+    prerequisites: [securities]
+
+  - id: share
+    name: "股份"
+    category: "基础概念"
+    difficulty: beginner
+    description: "公司资本被划分后的基本权益单位，是股票所代表的所有权份额。"
+    aliases: ["股", "Share"]
+    prerequisites: [stock]
+
+  - id: listed-company
+    name: "上市公司"
+    category: "基础概念"
+    difficulty: beginner
+    description: "股票在证券交易所公开交易，并需要按规则进行信息披露的公司。"
+    aliases: ["公众公司", "Public Company"]
+    prerequisites: [stock]
+
+  - id: shareholder
+    name: "股东"
+    category: "基础概念"
+    difficulty: beginner
+    description: "持有公司股份并享有相应股东权利的个人或机构。"
+    aliases: ["Shareholder"]
+    prerequisites: [share]
+
+  - id: equity
+    name: "股权"
+    category: "基础概念"
+    difficulty: beginner
+    description: "股东基于持股比例对公司拥有的权益，包括收益权、表决权等。"
+    aliases: ["Equity", "所有者权益"]
+    prerequisites: [shareholder]
+
+  - id: market-cap
+    name: "市值"
+    category: "基础概念"
+    difficulty: beginner
+    description: "公司股票总价值，通常等于股票价格乘以总股本。"
+    aliases: ["总市值", "Market Cap", "市价总值"]
+    prerequisites: [stock]
+
+  - id: total-share-capital
+    name: "总股本"
+    category: "基础概念"
+    difficulty: beginner
+    description: "公司已发行股份总数，包括流通股和限售股。"
+    aliases: ["Total Shares"]
+    prerequisites: [share]
+
+  - id: free-float
+    name: "流通股本"
+    category: "基础概念"
+    difficulty: beginner
+    description: "可以在二级市场自由交易的股份数量。"
+    aliases: ["流通股", "Free Float"]
+    prerequisites: [total-share-capital]
+
+  - id: float-market-cap
+    name: "流通市值"
+    category: "基础概念"
+    difficulty: beginner
+    description: "可流通股份对应的市场价值，通常等于股价乘以流通股本。"
+    aliases: ["Free-float Market Cap"]
+    prerequisites: [market-cap, free-float]
+
+  - id: dividend
+    name: "分红"
+    category: "基础概念"
+    difficulty: beginner
+    description: "公司将利润的一部分分配给股东的行为，常见形式包括现金分红和股票分红。"
+    aliases: ["派息", "Dividend"]
+    prerequisites: [shareholder]
+
+  - id: dividend-yield
+    name: "股息率"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "每股现金分红与股票价格的比率，用于衡量股息收入相对股价的水平。"
+    aliases: ["Dividend Yield"]
+    prerequisites: [dividend, stock]
+
+  - id: dividend-payout-ratio
+    name: "分红率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "公司分红金额占净利润的比例，用于观察利润分配力度。"
+    aliases: ["派息率", "Payout Ratio"]
+    prerequisites: [dividend, net-profit]
+
+  - id: bonus-share
+    name: "送股"
+    category: "公司行为"
+    difficulty: intermediate
+    description: "公司以股票形式向股东分配权益，股东持股数量增加但公司总价值不因送股本身改变。"
+    aliases: ["股票股利", "Bonus Share"]
+    prerequisites: [dividend, share]
+
+  - id: rights-issue
+    name: "配股"
+    category: "公司行为"
+    difficulty: intermediate
+    description: "上市公司向原股东按持股比例发行新股并融资的行为。"
+    aliases: ["Rights Issue"]
+    prerequisites: [shareholder, stock]
+
+  - id: share-repurchase
+    name: "股份回购"
+    category: "公司行为"
+    difficulty: intermediate
+    description: "公司使用资金买回自身股份，可能影响每股指标、资本结构和市场预期。"
+    aliases: ["回购", "Buyback", "Share Repurchase"]
+    prerequisites: [listed-company, share]
+
+  - id: delisting
+    name: "退市"
+    category: "市场制度"
+    difficulty: intermediate
+    description: "上市公司股票因触发规则或主动申请而退出交易所公开交易。"
+    aliases: ["摘牌", "Delisting"]
+    prerequisites: [listed-company]
+
+  - id: st-stock
+    name: "ST股票"
+    category: "市场制度"
+    difficulty: intermediate
+    description: "因财务或其他异常状况被实施特别处理的 A 股股票，风险提示属性更强。"
+    aliases: ["特别处理股票", "*ST"]
+    prerequisites: [a-share, delisting]
+
+  - id: blue-chip
+    name: "蓝筹股"
+    category: "股票类型"
+    difficulty: beginner
+    description: "通常指规模较大、经营相对稳定、市场认可度较高的公司股票。"
+    aliases: ["Blue Chip"]
+    prerequisites: [stock]
+
+  - id: growth-stock
+    name: "成长股"
+    category: "股票类型"
+    difficulty: intermediate
+    description: "市场预期收入或利润增长较快的公司股票，估值通常更依赖未来增长。"
+    aliases: ["Growth Stock"]
+    prerequisites: [stock, valuation]
+
+  - id: value-stock
+    name: "价值股"
+    category: "股票类型"
+    difficulty: intermediate
+    description: "相对基本面或资产价值而言价格较低的股票，常与低估值、高分红等特征相关。"
+    aliases: ["Value Stock"]
+    prerequisites: [stock, valuation]
+
+  - id: cyclical-stock
+    name: "周期股"
+    category: "股票类型"
+    difficulty: intermediate
+    description: "业绩与宏观经济、商品价格或行业周期高度相关的股票。"
+    aliases: ["Cyclical Stock"]
+    prerequisites: [stock, business-cycle]
+
+  - id: defensive-stock
+    name: "防御型股票"
+    category: "股票类型"
+    difficulty: intermediate
+    description: "需求相对稳定、受经济周期影响较小的公司股票。"
+    aliases: ["Defensive Stock"]
+    prerequisites: [stock, business-cycle]
+
+  - id: concept-stock
+    name: "概念股"
+    category: "股票类型"
+    difficulty: beginner
+    description: "因某一主题、政策、技术或事件预期而受到市场关注的股票。"
+    aliases: ["主题股", "Concept Stock"]
+    prerequisites: [stock, thematic-investing]
+
+  - id: sector
+    name: "板块"
+    category: "市场结构"
+    difficulty: beginner
+    description: "按行业、主题、地区或风格等标准划分的一组股票。"
+    aliases: ["Sector", "概念板块"]
+    prerequisites: [stock]
+
+  - id: industry
+    name: "行业"
+    category: "市场结构"
+    difficulty: beginner
+    description: "具有相似产品、服务或商业模式的公司集合。"
+    aliases: ["Industry"]
+    prerequisites: [listed-company]
+
+  - id: thematic-investing
+    name: "主题投资"
+    category: "投资方法"
+    difficulty: intermediate
+    description: "围绕政策、技术、产业趋势或社会变化等主题选择投资标的的方法。"
+    aliases: ["Theme Investing"]
+    prerequisites: [sector, industry]
+
+  - id: a-share
+    name: "A股"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "在中国内地交易所上市、通常以人民币计价交易的股票。"
+    aliases: ["人民币普通股", "A Share", "A股市场"]
+    prerequisites: [stock]
+
+  - id: b-share
+    name: "B股"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "在中国内地交易所上市、以外币计价交易的股票品种。"
+    aliases: ["境内上市外资股", "B Share"]
+    prerequisites: [stock]
+
+  - id: h-share
+    name: "H股"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "注册地在中国内地、在香港交易所上市交易的公司股票。"
+    aliases: ["H Share", "国企股"]
+    prerequisites: [stock, hk-stock]
+
+  - id: hk-stock
+    name: "港股"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "在香港证券市场上市交易的股票。"
+    aliases: ["香港股票", "Hong Kong Stocks"]
+    prerequisites: [stock]
+
+  - id: us-stock
+    name: "美股"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "在美国证券市场上市交易的股票。"
+    aliases: ["美国股票", "US Stocks"]
+    prerequisites: [stock]
+
+  - id: main-board
+    name: "主板"
+    category: "市场与品种"
+    difficulty: beginner
+    description: "服务较成熟企业的股票上市板块，是 A 股主要交易板块之一。"
+    aliases: ["主板市场"]
+    prerequisites: [a-share]
+
+  - id: star-market
+    name: "科创板"
+    category: "市场与品种"
+    difficulty: intermediate
+    description: "上海证券交易所面向科技创新企业设立的股票板块，实行注册制和差异化交易规则。"
+    aliases: ["STAR Market", "科创板市场"]
+    prerequisites: [a-share, registration-system]
+
+  - id: chinext
+    name: "创业板"
+    category: "市场与品种"
+    difficulty: intermediate
+    description: "深圳证券交易所面向成长型创新创业企业设立的股票板块。"
+    aliases: ["ChiNext"]
+    prerequisites: [a-share, registration-system]
+
+  - id: beijing-stock-exchange
+    name: "北交所"
+    category: "市场与品种"
+    difficulty: intermediate
+    description: "北京证券交易所，主要服务创新型中小企业。"
+    aliases: ["BSE", "北京证券交易所"]
+    prerequisites: [a-share]
+
+  - id: neeq
+    name: "新三板"
+    category: "市场与品种"
+    difficulty: intermediate
+    description: "全国中小企业股份转让系统，服务非上市公众公司股份转让。"
+    aliases: ["全国股转系统", "NEEQ"]
+    prerequisites: [securities]
+
+  - id: shanghai-stock-exchange
+    name: "上交所"
+    category: "交易场所"
+    difficulty: beginner
+    description: "上海证券交易所，是中国内地主要证券交易所之一。"
+    aliases: ["SSE", "上海证券交易所"]
+    prerequisites: [securities]
+
+  - id: shenzhen-stock-exchange
+    name: "深交所"
+    category: "交易场所"
+    difficulty: beginner
+    description: "深圳证券交易所，是中国内地主要证券交易所之一。"
+    aliases: ["SZSE", "深圳证券交易所"]
+    prerequisites: [securities]
+
+  - id: hong-kong-stock-exchange
+    name: "港交所"
+    category: "交易场所"
+    difficulty: beginner
+    description: "香港交易及结算所有限公司运营的证券交易市场。"
+    aliases: ["HKEX", "香港交易所"]
+    prerequisites: [hk-stock]
+
+  - id: nyse
+    name: "纽约证券交易所"
+    category: "交易场所"
+    difficulty: beginner
+    description: "美国主要证券交易所之一，上市公司以大型成熟企业为主。"
+    aliases: ["NYSE", "纽交所"]
+    prerequisites: [us-stock]
+
+  - id: nasdaq
+    name: "纳斯达克"
+    category: "交易场所"
+    difficulty: beginner
+    description: "美国主要证券交易市场之一，科技和成长型公司占比较高。"
+    aliases: ["NASDAQ"]
+    prerequisites: [us-stock]
+
+  - id: stock-connect
+    name: "沪深港通"
+    category: "跨市场机制"
+    difficulty: intermediate
+    description: "内地与香港股票市场之间的互联互通交易机制。"
+    aliases: ["互联互通", "Stock Connect"]
+    prerequisites: [a-share, hk-stock]
+
+  - id: northbound-trading
+    name: "北向交易"
+    category: "跨市场机制"
+    difficulty: intermediate
+    description: "境外投资者通过互联互通机制买卖沪深交易所股票的交易方向。"
+    aliases: ["北向资金", "Northbound Trading"]
+    prerequisites: [stock-connect, a-share]
+
+  - id: southbound-trading
+    name: "南向交易"
+    category: "跨市场机制"
+    difficulty: intermediate
+    description: "内地投资者通过互联互通机制买卖香港市场股票的交易方向。"
+    aliases: ["南向资金", "Southbound Trading"]
+    prerequisites: [stock-connect, hk-stock]
+
+  - id: qfii
+    name: "合格境外机构投资者"
+    category: "跨市场机制"
+    difficulty: advanced
+    description: "符合条件的境外机构投资者依法投资境内证券市场的制度安排。"
+    aliases: ["QFII", "RQFII"]
+    prerequisites: [securities, a-share]
+
+  - id: rmb
+    name: "人民币"
+    category: "货币"
+    difficulty: beginner
+    description: "中国法定货币，A 股通常以人民币计价交易。"
+    aliases: ["CNY", "人民币元"]
+    prerequisites: []
+
+  - id: hkd
+    name: "港元"
+    category: "货币"
+    difficulty: beginner
+    description: "香港法定货币，港股通常以港元计价交易。"
+    aliases: ["HKD", "港币"]
+    prerequisites: []
+
+  - id: usd
+    name: "美元"
+    category: "货币"
+    difficulty: beginner
+    description: "美国法定货币，美股通常以美元计价交易。"
+    aliases: ["USD", "美金"]
+    prerequisites: []
+
+  - id: trading-account
+    name: "证券账户"
+    category: "交易基础"
+    difficulty: beginner
+    description: "用于记录投资者持有和交易证券的账户。"
+    aliases: ["股东账户"]
+    prerequisites: [securities]
+
+  - id: brokerage-account
+    name: "资金账户"
+    category: "交易基础"
+    difficulty: beginner
+    description: "投资者在证券公司开立的资金结算账户，用于证券交易资金划转。"
+    aliases: ["证券资金账户"]
+    prerequisites: [trading-account]
+
+  - id: trading-day
+    name: "交易日"
+    category: "交易基础"
+    difficulty: beginner
+    description: "证券市场按规则开放交易的日期。"
+    aliases: ["Trading Day"]
+    prerequisites: [securities]
+
+  - id: trading-session
+    name: "交易时段"
+    category: "交易基础"
+    difficulty: beginner
+    description: "交易日内可以进行报价、撮合或成交的具体时间段。"
+    aliases: ["交易时间", "Trading Session"]
+    prerequisites: [trading-day]
+
+  - id: call-auction
+    name: "集合竞价"
+    category: "交易规则"
+    difficulty: intermediate
+    description: "在规定时间内集中接收买卖申报，并按规则一次性撮合成交的交易方式。"
+    aliases: ["Opening Call Auction", "Closing Call Auction"]
+    prerequisites: [order]
+
+  - id: continuous-auction
+    name: "连续竞价"
+    category: "交易规则"
+    difficulty: beginner
+    description: "交易时段内买卖申报持续进入系统并按价格优先、时间优先等规则撮合的交易方式。"
+    aliases: ["Continuous Auction"]
+    prerequisites: [order]
+
+  - id: lot
+    name: "交易单位"
+    category: "交易规则"
+    difficulty: beginner
+    description: "买卖证券时规定的最小申报数量单位，A 股股票常以手为单位。"
+    aliases: ["一手", "手", "Board Lot"]
+    prerequisites: [stock]
+
+  - id: tick-size
+    name: "最小变动价位"
+    category: "交易规则"
+    difficulty: beginner
+    description: "证券报价可以变动的最小价格单位。"
+    aliases: ["最小报价单位", "Tick Size"]
+    prerequisites: [order]
+
+  - id: t-plus-one
+    name: "T+1"
+    category: "交易规则"
+    difficulty: beginner
+    description: "交易发生后的下一个交易日才能完成某些交收或卖出限制的制度。"
+    aliases: ["T加1", "T+1交易制度"]
+    prerequisites: [trading-day]
+
+  - id: price-limit
+    name: "涨跌幅限制"
+    category: "交易规则"
+    difficulty: beginner
+    description: "交易所对证券单日价格涨跌幅度设置的限制。"
+    aliases: ["涨跌停限制", "Price Limit"]
+    prerequisites: [a-share]
+
+  - id: limit-up
+    name: "涨停"
+    category: "交易规则"
+    difficulty: beginner
+    description: "证券价格达到当日允许上涨的最高限制。"
+    aliases: ["涨停板", "Limit Up"]
+    prerequisites: [price-limit]
+
+  - id: limit-down
+    name: "跌停"
+    category: "交易规则"
+    difficulty: beginner
+    description: "证券价格达到当日允许下跌的最低限制。"
+    aliases: ["跌停板", "Limit Down"]
+    prerequisites: [price-limit]
+
+  - id: suspension
+    name: "停牌"
+    category: "交易规则"
+    difficulty: intermediate
+    description: "证券在一段时间内暂停交易的状态。"
+    aliases: ["Trading Halt"]
+    prerequisites: [stock]
+
+  - id: resumption
+    name: "复牌"
+    category: "交易规则"
+    difficulty: intermediate
+    description: "停牌证券恢复交易的状态。"
+    aliases: ["Resume Trading"]
+    prerequisites: [suspension]
+
+  - id: ipo
+    name: "首次公开发行"
+    category: "发行融资"
+    difficulty: beginner
+    description: "公司首次向公众发行股票并申请上市交易的过程。"
+    aliases: ["IPO", "新股发行", "首发上市"]
+    prerequisites: [stock, listed-company]
+
+  - id: new-share-subscription
+    name: "打新"
+    category: "发行融资"
+    difficulty: intermediate
+    description: "投资者参与新股申购的行为。"
+    aliases: ["新股申购", "IPO Subscription"]
+    prerequisites: [ipo, trading-account]
+
+  - id: primary-market
+    name: "一级市场"
+    category: "市场结构"
+    difficulty: beginner
+    description: "证券首次发行和融资发生的市场。"
+    aliases: ["发行市场", "Primary Market"]
+    prerequisites: [securities]
+
+  - id: secondary-market
+    name: "二级市场"
+    category: "市场结构"
+    difficulty: beginner
+    description: "已发行证券在投资者之间流通买卖的市场。"
+    aliases: ["流通市场", "Secondary Market"]
+    prerequisites: [securities]
+
+  - id: margin-trading
+    name: "融资交易"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "投资者向证券公司借入资金买入证券的交易方式。"
+    aliases: ["融资买入", "Margin Trading"]
+    prerequisites: [brokerage-account, leverage]
+
+  - id: short-selling
+    name: "融券卖出"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "投资者借入证券后卖出，并在未来买回归还的交易方式。"
+    aliases: ["融券", "Short Selling"]
+    prerequisites: [brokerage-account, leverage]
+
+  - id: securities-lending
+    name: "转融通"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "证券金融公司向证券公司提供资金或证券，再由证券公司用于融资融券业务的机制。"
+    aliases: ["转融券", "Securities Lending"]
+    prerequisites: [margin-trading, short-selling]
+
+  - id: block-trade
+    name: "大宗交易"
+    category: "交易规则"
+    difficulty: intermediate
+    description: "达到规定规模的证券交易，通过专门平台按规则完成。"
+    aliases: ["Block Trade"]
+    prerequisites: [secondary-market]
+
+  - id: commission
+    name: "佣金"
+    category: "交易成本"
+    difficulty: beginner
+    description: "投资者向证券公司支付的交易服务费用。"
+    aliases: ["券商佣金", "Commission"]
+    prerequisites: [order]
+
+  - id: stamp-duty
+    name: "印花税"
+    category: "交易成本"
+    difficulty: beginner
+    description: "证券交易中按规定缴纳的税费，A 股股票交易常在卖出环节收取。"
+    aliases: ["Stamp Duty"]
+    prerequisites: [order]
+
+  - id: transfer-fee
+    name: "过户费"
+    category: "交易成本"
+    difficulty: beginner
+    description: "证券成交后因股份登记过户产生的费用。"
+    aliases: ["Transfer Fee"]
+    prerequisites: [order]
+
+  - id: transaction-cost
+    name: "交易成本"
+    category: "交易成本"
+    difficulty: intermediate
+    description: "完成交易所需承担的显性费用和隐性成本，包括佣金、税费、滑点等。"
+    aliases: ["Transaction Cost"]
+    prerequisites: [commission, stamp-duty, slippage]
+
+  - id: slippage
+    name: "滑点"
+    category: "交易成本"
+    difficulty: intermediate
+    description: "预期成交价格与实际成交价格之间的差异。"
+    aliases: ["Slippage"]
+    prerequisites: [order, spread]
+
+  - id: order
+    name: "委托"
+    category: "交易基础"
+    difficulty: beginner
+    description: "投资者向交易系统提交买入或卖出证券的指令。"
+    aliases: ["订单", "Order"]
+    prerequisites: [trading-account]
+
+  - id: market-order
+    name: "市价委托"
+    category: "交易基础"
+    difficulty: beginner
+    description: "以市场可成交价格尽快成交的委托方式，成交价格可能与预期不同。"
+    aliases: ["市价单", "Market Order"]
+    prerequisites: [order]
+
+  - id: limit-order
+    name: "限价委托"
+    category: "交易基础"
+    difficulty: beginner
+    description: "限定买入最高价或卖出最低价的委托方式。"
+    aliases: ["限价单", "Limit Order"]
+    prerequisites: [order]
+
+  - id: bid
+    name: "买盘"
+    category: "行情数据"
+    difficulty: beginner
+    description: "市场中愿意买入证券的报价和数量。"
+    aliases: ["买价", "Bid"]
+    prerequisites: [order]
+
+  - id: ask
+    name: "卖盘"
+    category: "行情数据"
+    difficulty: beginner
+    description: "市场中愿意卖出证券的报价和数量。"
+    aliases: ["卖价", "Ask", "Offer"]
+    prerequisites: [order]
+
+  - id: spread
+    name: "买卖价差"
+    category: "行情数据"
+    difficulty: beginner
+    description: "最优卖价与最优买价之间的差额，反映交易摩擦和流动性状况。"
+    aliases: ["Bid-Ask Spread", "价差"]
+    prerequisites: [bid, ask]
+
+  - id: open-price
+    name: "开盘价"
+    category: "行情数据"
+    difficulty: beginner
+    description: "证券在一个交易日开始交易后形成的首个成交价格或开盘参考价格。"
+    aliases: ["Open"]
+    prerequisites: [trading-day]
+
+  - id: close-price
+    name: "收盘价"
+    category: "行情数据"
+    difficulty: beginner
+    description: "证券在一个交易日结束时形成的收盘价格。"
+    aliases: ["Close"]
+    prerequisites: [trading-day]
+
+  - id: high-price
+    name: "最高价"
+    category: "行情数据"
+    difficulty: beginner
+    description: "证券在指定周期内达到的最高成交价格。"
+    aliases: ["High"]
+    prerequisites: [trading-day]
+
+  - id: low-price
+    name: "最低价"
+    category: "行情数据"
+    difficulty: beginner
+    description: "证券在指定周期内达到的最低成交价格。"
+    aliases: ["Low"]
+    prerequisites: [trading-day]
+
+  - id: last-price
+    name: "最新价"
+    category: "行情数据"
+    difficulty: beginner
+    description: "证券最近一笔成交对应的价格。"
+    aliases: ["Last Price", "现价"]
+    prerequisites: [stock]
+
+  - id: volume
+    name: "成交量"
+    category: "行情数据"
+    difficulty: beginner
+    description: "指定时间内成交的证券数量。"
+    aliases: ["Volume", "交易量"]
+    prerequisites: [order]
+
+  - id: turnover
+    name: "成交额"
+    category: "行情数据"
+    difficulty: beginner
+    description: "指定时间内成交金额的合计。"
+    aliases: ["Turnover", "交易额"]
+    prerequisites: [volume]
+
+  - id: turnover-rate
+    name: "换手率"
+    category: "行情数据"
+    difficulty: intermediate
+    description: "成交量与流通股本的比例，用于观察股票交易活跃程度。"
+    aliases: ["Turnover Rate"]
+    prerequisites: [volume, free-float]
+
+  - id: amplitude
+    name: "振幅"
+    category: "行情数据"
+    difficulty: beginner
+    description: "指定周期内最高价与最低价相对参考价格的波动幅度。"
+    aliases: ["Amplitude"]
+    prerequisites: [high-price, low-price]
+
+  - id: volume-ratio
+    name: "量比"
+    category: "行情数据"
+    difficulty: intermediate
+    description: "当前成交量相对过去平均成交水平的比值，用于观察成交活跃度变化。"
+    aliases: ["Volume Ratio"]
+    prerequisites: [volume]
+
+  - id: order-book
+    name: "盘口"
+    category: "行情数据"
+    difficulty: intermediate
+    description: "市场中买卖委托价格、数量和排队情况的集合。"
+    aliases: ["Order Book"]
+    prerequisites: [bid, ask]
+
+  - id: level2
+    name: "Level-2行情"
+    category: "行情数据"
+    difficulty: advanced
+    description: "比基础行情更详细的委托、成交和盘口数据服务。"
+    aliases: ["L2行情", "Level 2"]
+    prerequisites: [order-book]
+
+  - id: capital-flow
+    name: "资金流向"
+    category: "行情数据"
+    difficulty: intermediate
+    description: "根据成交数据估算资金净流入或净流出的指标体系。"
+    aliases: ["资金流", "Capital Flow"]
+    prerequisites: [turnover]
+
+  - id: main-funds
+    name: "主力资金"
+    category: "行情数据"
+    difficulty: intermediate
+    description: "市场中被归类为较大规模交易资金的统计口径。"
+    aliases: ["大单资金", "Main Funds"]
+    prerequisites: [capital-flow]
+
+  - id: index
+    name: "指数"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "按照一定规则选取证券并计算得到的市场表现指标。"
+    aliases: ["Index", "市场指数"]
+    prerequisites: [securities]
+
+  - id: stock-index
+    name: "股票指数"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "用于反映一组股票整体价格表现的指数。"
+    aliases: ["Stock Index"]
+    prerequisites: [index, stock]
+
+  - id: csi300
+    name: "沪深300"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "反映沪深市场中规模和流动性较好的 300 只股票整体表现的指数。"
+    aliases: ["CSI 300", "沪深300指数"]
+    prerequisites: [stock-index, a-share]
+
+  - id: csi500
+    name: "中证500"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "反映 A 股市场中一批中等市值股票整体表现的指数。"
+    aliases: ["CSI 500", "中证500指数"]
+    prerequisites: [stock-index, a-share]
+
+  - id: sse50
+    name: "上证50"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "由上海证券市场中规模大、流动性好的代表性股票组成的指数。"
+    aliases: ["SSE 50", "上证50指数"]
+    prerequisites: [stock-index, shanghai-stock-exchange]
+
+  - id: chinext-index
+    name: "创业板指"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "反映创业板市场代表性股票整体表现的指数。"
+    aliases: ["创业板指数", "ChiNext Index"]
+    prerequisites: [stock-index, chinext]
+
+  - id: index-constituent
+    name: "指数成分股"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "被纳入某一指数计算范围的证券。"
+    aliases: ["成分股", "Index Constituent"]
+    prerequisites: [index, stock]
+
+  - id: index-weight
+    name: "指数权重"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "单个成分证券在指数计算中所占的比例。"
+    aliases: ["权重", "Index Weight"]
+    prerequisites: [index-constituent]
+
+  - id: benchmark
+    name: "基准"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "用于比较投资组合或策略表现的参照对象，常见为指数。"
+    aliases: ["业绩基准", "Benchmark"]
+    prerequisites: [index]
+
+  - id: etf
+    name: "ETF"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "在交易所上市交易的开放式基金，常用于跟踪指数或特定资产。"
+    aliases: ["交易型开放式指数基金", "Exchange Traded Fund"]
+    prerequisites: [fund, index]
+
+  - id: fund
+    name: "基金"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "由基金管理人集合投资者资金并按基金合同进行投资管理的金融产品。"
+    aliases: ["投资基金", "Fund"]
+    prerequisites: [securities]
+
+  - id: mutual-fund
+    name: "公募基金"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "面向公众募集资金并由专业机构管理的基金产品。"
+    aliases: ["公募", "Mutual Fund"]
+    prerequisites: [fund]
+
+  - id: index-fund
+    name: "指数基金"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "以跟踪特定指数为主要目标的基金。"
+    aliases: ["被动基金", "Index Fund"]
+    prerequisites: [fund, index]
+
+  - id: lof
+    name: "LOF"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "上市型开放式基金，既可在场内交易，也可按规则申购赎回。"
+    aliases: ["上市开放式基金", "Listed Open-Ended Fund"]
+    prerequisites: [fund]
+
+  - id: qdii
+    name: "QDII"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "合格境内机构投资者产品，用于投资境外市场。"
+    aliases: ["合格境内机构投资者"]
+    prerequisites: [fund, hk-stock, us-stock]
+
+  - id: fund-nav
+    name: "基金净值"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "基金资产扣除负债后分摊到每一基金份额的价值。"
+    aliases: ["单位净值", "NAV"]
+    prerequisites: [fund]
+
+  - id: premium-discount
+    name: "溢价折价"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "交易价格高于或低于资产净值的状态。"
+    aliases: ["溢价", "折价", "Premium/Discount"]
+    prerequisites: [etf, fund-nav]
+
+  - id: tracking-error
+    name: "跟踪误差"
+    category: "指数与基金"
+    difficulty: intermediate
+    description: "基金收益率与目标指数收益率之间偏离程度的指标。"
+    aliases: ["Tracking Error"]
+    prerequisites: [index-fund, benchmark]
+
+  - id: expense-ratio
+    name: "费率"
+    category: "指数与基金"
+    difficulty: beginner
+    description: "投资基金或交易产品需要承担的管理费、托管费、交易费等费用比例。"
+    aliases: ["费用率", "Expense Ratio"]
+    prerequisites: [fund]
+
+  - id: financial-report
+    name: "财报"
+    category: "财务报表"
+    difficulty: beginner
+    description: "公司按规定披露的财务状况、经营成果和现金流量等信息文件。"
+    aliases: ["财务报告", "Financial Report"]
+    prerequisites: [listed-company]
+
+  - id: annual-report
+    name: "年报"
+    category: "财务报表"
+    difficulty: beginner
+    description: "上市公司按年度披露的完整财务和经营信息报告。"
+    aliases: ["年度报告", "Annual Report"]
+    prerequisites: [financial-report]
+
+  - id: quarterly-report
+    name: "季报"
+    category: "财务报表"
+    difficulty: beginner
+    description: "上市公司按季度披露的财务和经营信息报告。"
+    aliases: ["季度报告", "Quarterly Report"]
+    prerequisites: [financial-report]
+
+  - id: balance-sheet
+    name: "资产负债表"
+    category: "财务报表"
+    difficulty: beginner
+    description: "反映公司在特定日期资产、负债和所有者权益状况的报表。"
+    aliases: ["Balance Sheet"]
+    prerequisites: [financial-report]
+
+  - id: income-statement
+    name: "利润表"
+    category: "财务报表"
+    difficulty: beginner
+    description: "反映公司在一定期间收入、成本、费用和利润的报表。"
+    aliases: ["损益表", "Income Statement", "P&L"]
+    prerequisites: [financial-report]
+
+  - id: cash-flow-statement
+    name: "现金流量表"
+    category: "财务报表"
+    difficulty: beginner
+    description: "反映公司在一定期间经营、投资和筹资现金流入流出的报表。"
+    aliases: ["Cash Flow Statement"]
+    prerequisites: [financial-report]
+
+  - id: revenue
+    name: "营业收入"
+    category: "财务指标"
+    difficulty: beginner
+    description: "公司通过主营业务和其他经营活动取得的收入。"
+    aliases: ["营收", "Revenue"]
+    prerequisites: [income-statement]
+
+  - id: gross-profit
+    name: "毛利润"
+    category: "财务指标"
+    difficulty: beginner
+    description: "营业收入扣除营业成本后的利润。"
+    aliases: ["Gross Profit"]
+    prerequisites: [revenue]
+
+  - id: gross-margin
+    name: "毛利率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "毛利润占营业收入的比例，用于观察产品或服务的盈利空间。"
+    aliases: ["Gross Margin"]
+    prerequisites: [gross-profit, revenue]
+
+  - id: operating-profit
+    name: "营业利润"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "公司经营活动形成的利润，通常在净利润之前计算。"
+    aliases: ["Operating Profit"]
+    prerequisites: [income-statement]
+
+  - id: net-profit
+    name: "净利润"
+    category: "财务指标"
+    difficulty: beginner
+    description: "公司在一定期间扣除成本、费用、税费等后的最终利润。"
+    aliases: ["Net Profit", "净利"]
+    prerequisites: [income-statement]
+
+  - id: net-profit-attributable
+    name: "归母净利润"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "归属于上市公司普通股股东的净利润。"
+    aliases: ["归属于母公司股东的净利润"]
+    prerequisites: [net-profit, shareholder]
+
+  - id: eps
+    name: "EPS"
+    category: "财务指标"
+    difficulty: beginner
+    description: "每股收益，通常表示归属于普通股股东的净利润分摊到每股后的金额。"
+    aliases: ["每股收益", "Earnings Per Share"]
+    prerequisites: [net-profit-attributable, share]
+
+  - id: roe
+    name: "ROE"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "净资产收益率，衡量公司利用股东权益创造利润的能力。"
+    aliases: ["净资产收益率", "Return on Equity"]
+    prerequisites: [net-profit, equity]
+
+  - id: roa
+    name: "ROA"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "总资产收益率，衡量公司利用全部资产创造利润的能力。"
+    aliases: ["总资产收益率", "Return on Assets"]
+    prerequisites: [net-profit, balance-sheet]
+
+  - id: debt-to-asset-ratio
+    name: "资产负债率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "总负债占总资产的比例，用于观察公司杠杆和偿债压力。"
+    aliases: ["负债率", "Debt-to-Asset Ratio"]
+    prerequisites: [balance-sheet]
+
+  - id: current-ratio
+    name: "流动比率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "流动资产与流动负债的比率，用于观察短期偿债能力。"
+    aliases: ["Current Ratio"]
+    prerequisites: [balance-sheet]
+
+  - id: quick-ratio
+    name: "速动比率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "速动资产与流动负债的比率，比流动比率更强调可快速变现资产。"
+    aliases: ["Quick Ratio"]
+    prerequisites: [current-ratio]
+
+  - id: inventory-turnover
+    name: "存货周转率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "衡量存货转换为销售成本或收入效率的指标。"
+    aliases: ["Inventory Turnover"]
+    prerequisites: [income-statement, balance-sheet]
+
+  - id: accounts-receivable-turnover
+    name: "应收账款周转率"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "衡量公司回收应收账款效率的指标。"
+    aliases: ["Receivables Turnover"]
+    prerequisites: [income-statement, balance-sheet]
+
+  - id: operating-cash-flow
+    name: "经营现金流"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "公司经营活动产生的现金流量，常用于观察利润质量。"
+    aliases: ["经营活动现金流", "Operating Cash Flow", "OCF"]
+    prerequisites: [cash-flow-statement]
+
+  - id: free-cash-flow
+    name: "自由现金流"
+    category: "财务指标"
+    difficulty: advanced
+    description: "公司经营现金流扣除维持或扩大经营所需资本开支后的现金流。"
+    aliases: ["FCF", "Free Cash Flow"]
+    prerequisites: [operating-cash-flow, capex]
+
+  - id: capex
+    name: "资本开支"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "公司用于购建长期资产的支出。"
+    aliases: ["资本性支出", "CAPEX"]
+    prerequisites: [cash-flow-statement]
+
+  - id: goodwill
+    name: "商誉"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "企业并购中购买成本超过可辨认净资产公允价值的部分。"
+    aliases: ["Goodwill"]
+    prerequisites: [balance-sheet]
+
+  - id: impairment
+    name: "减值"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "资产可收回金额低于账面价值时确认的价值减少。"
+    aliases: ["资产减值", "Impairment"]
+    prerequisites: [balance-sheet, income-statement]
+
+  - id: non-recurring-profit
+    name: "非经常性损益"
+    category: "财务指标"
+    difficulty: intermediate
+    description: "与公司正常经营业务关联不强、偶发性较高的损益项目。"
+    aliases: ["非经损益", "Non-recurring Items"]
+    prerequisites: [net-profit]
+
+  - id: valuation
+    name: "估值"
+    category: "估值与收益"
+    difficulty: beginner
+    description: "对资产合理价值或价格水平进行判断的过程。"
+    aliases: ["Valuation"]
+    prerequisites: [stock]
+
+  - id: pe
+    name: "PE"
+    category: "估值与收益"
+    difficulty: beginner
+    description: "市盈率，通常为股价或总市值与每股收益或净利润的比值。"
+    aliases: ["市盈率", "P/E", "Price-to-Earnings Ratio"]
+    prerequisites: [valuation, eps]
+
+  - id: pb
+    name: "PB"
+    category: "估值与收益"
+    difficulty: beginner
+    description: "市净率，通常为股价或总市值与每股净资产或净资产的比值。"
+    aliases: ["市净率", "P/B", "Price-to-Book Ratio"]
+    prerequisites: [valuation, equity]
+
+  - id: ps
+    name: "PS"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "市销率，通常为总市值与营业收入的比值。"
+    aliases: ["市销率", "P/S", "Price-to-Sales Ratio"]
+    prerequisites: [valuation, revenue]
+
+  - id: pcf
+    name: "PCF"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "市现率，通常为总市值与现金流指标的比值。"
+    aliases: ["市现率", "P/CF", "Price-to-Cash-Flow Ratio"]
+    prerequisites: [valuation, operating-cash-flow]
+
+  - id: peg
+    name: "PEG"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "市盈率相对盈利增长率的比值，用于结合估值与增长观察价格水平。"
+    aliases: ["市盈增长比率", "PEG Ratio"]
+    prerequisites: [pe, growth-stock]
+
+  - id: ev
+    name: "企业价值"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "综合考虑股权价值、债务和现金后的企业整体价值指标。"
+    aliases: ["EV", "Enterprise Value"]
+    prerequisites: [market-cap, debt-to-asset-ratio]
+
+  - id: ebit
+    name: "EBIT"
+    category: "财务指标"
+    difficulty: advanced
+    description: "息税前利润，即扣除利息和所得税之前的利润。"
+    aliases: ["息税前利润"]
+    prerequisites: [income-statement]
+
+  - id: ebitda
+    name: "EBITDA"
+    category: "财务指标"
+    difficulty: advanced
+    description: "息税折旧摊销前利润，用于观察企业经营盈利能力。"
+    aliases: ["息税折旧摊销前利润"]
+    prerequisites: [ebit]
+
+  - id: ev-ebitda
+    name: "EV/EBITDA"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "企业价值与 EBITDA 的比值，常用于资本结构差异较大的公司估值比较。"
+    aliases: ["企业价值倍数"]
+    prerequisites: [ev, ebitda]
+
+  - id: dcf
+    name: "DCF"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "现金流折现法，通过将未来现金流折现到当前来估算内在价值。"
+    aliases: ["现金流折现", "Discounted Cash Flow"]
+    prerequisites: [free-cash-flow, discount-rate]
+
+  - id: discount-rate
+    name: "折现率"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "将未来现金流转换为当前价值时使用的收益率或资本成本。"
+    aliases: ["Discount Rate"]
+    prerequisites: [risk-free-rate, equity-risk-premium]
+
+  - id: risk-free-rate
+    name: "无风险利率"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "理论上不承担信用风险和再投资风险的基础收益率，常用国债收益率近似。"
+    aliases: ["Risk-free Rate"]
+    prerequisites: [bond]
+
+  - id: equity-risk-premium
+    name: "股权风险溢价"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "投资股票相对于无风险资产所要求的额外预期收益。"
+    aliases: ["ERP", "Equity Risk Premium"]
+    prerequisites: [risk-free-rate, market-risk]
+
+  - id: intrinsic-value
+    name: "内在价值"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "基于资产未来现金流、盈利能力或资产质量估算出的价值。"
+    aliases: ["Intrinsic Value"]
+    prerequisites: [valuation]
+
+  - id: margin-of-safety
+    name: "安全边际"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "估算价值与买入价格之间留出的保护空间。"
+    aliases: ["Margin of Safety"]
+    prerequisites: [intrinsic-value]
+
+  - id: relative-valuation
+    name: "相对估值"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "通过 PE、PB、PS 等估值倍数与可比对象比较来判断估值水平的方法。"
+    aliases: ["Relative Valuation"]
+    prerequisites: [valuation, pe, pb]
+
+  - id: absolute-valuation
+    name: "绝对估值"
+    category: "估值与收益"
+    difficulty: advanced
+    description: "直接估算资产内在价值的方法，通常依赖现金流折现或收益折现模型。"
+    aliases: ["Absolute Valuation"]
+    prerequisites: [valuation, dcf]
+
+  - id: ttm
+    name: "TTM"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "滚动十二个月口径，常用于财务指标和估值指标计算。"
+    aliases: ["Trailing Twelve Months", "滚动12个月"]
+    prerequisites: [financial-report]
+
+  - id: forward-pe
+    name: "动态PE"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "基于未来盈利预测计算的市盈率。"
+    aliases: ["预期市盈率", "Forward P/E"]
+    prerequisites: [pe]
+
+  - id: historical-percentile
+    name: "历史分位"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "当前指标在历史样本中所处的相对位置。"
+    aliases: ["Percentile", "分位数"]
+    prerequisites: [valuation]
+
+  - id: valuation-band
+    name: "估值区间"
+    category: "估值与收益"
+    difficulty: intermediate
+    description: "根据历史估值、盈利预期或模型假设形成的价值范围。"
+    aliases: ["估值带", "Valuation Band"]
+    prerequisites: [valuation, historical-percentile]
+
+  - id: k-line
+    name: "K线"
+    category: "技术分析"
+    difficulty: beginner
+    description: "用开盘价、收盘价、最高价和最低价展示一定周期价格变化的图形。"
+    aliases: ["蜡烛图", "Candlestick", "K线图"]
+    prerequisites: [open-price, close-price, high-price, low-price]
+
+  - id: moving-average
+    name: "均线"
+    category: "技术分析"
+    difficulty: beginner
+    description: "一定周期内价格的移动平均线，用于观察价格趋势。"
+    aliases: ["MA", "移动平均线", "Moving Average"]
+    prerequisites: [close-price]
+
+  - id: support
+    name: "支撑位"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "价格下跌过程中市场可能出现买盘支撑的区域或价位。"
+    aliases: ["Support"]
+    prerequisites: [k-line, trend]
+
+  - id: resistance
+    name: "压力位"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "价格上涨过程中市场可能出现卖盘压力的区域或价位。"
+    aliases: ["阻力位", "Resistance"]
+    prerequisites: [k-line, trend]
+
+  - id: trend
+    name: "趋势"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格在一段时间内呈现的主要运行方向。"
+    aliases: ["Trend"]
+    prerequisites: [k-line]
+
+  - id: uptrend
+    name: "上升趋势"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格在一段时间内总体向上运行的状态。"
+    aliases: ["上涨趋势", "Uptrend"]
+    prerequisites: [trend]
+
+  - id: downtrend
+    name: "下降趋势"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格在一段时间内总体向下运行的状态。"
+    aliases: ["下跌趋势", "Downtrend"]
+    prerequisites: [trend]
+
+  - id: sideways
+    name: "震荡"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格在一定区间内反复波动、方向不明显的状态。"
+    aliases: ["横盘", "盘整", "Sideways"]
+    prerequisites: [trend]
+
+  - id: breakout
+    name: "突破"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "价格向上或向下越过重要区域、趋势线或关键价位的现象。"
+    aliases: ["Breakout"]
+    prerequisites: [support, resistance]
+
+  - id: pullback
+    name: "回调"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格上涨后出现阶段性下跌或整理的现象。"
+    aliases: ["Pullback"]
+    prerequisites: [uptrend]
+
+  - id: rebound
+    name: "反弹"
+    category: "技术分析"
+    difficulty: beginner
+    description: "价格下跌后出现阶段性上涨的现象。"
+    aliases: ["Rebound"]
+    prerequisites: [downtrend]
+
+  - id: gap
+    name: "跳空缺口"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "相邻交易周期价格之间出现未成交区间的图形现象。"
+    aliases: ["缺口", "Gap"]
+    prerequisites: [k-line]
+
+  - id: macd
+    name: "MACD"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "基于指数移动平均线构建的趋势类技术指标。"
+    aliases: ["指数平滑异同移动平均线"]
+    prerequisites: [moving-average, trend]
+
+  - id: rsi
+    name: "RSI"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "相对强弱指标，用于衡量一段时间内价格上涨和下跌力量的相对强度。"
+    aliases: ["相对强弱指标", "Relative Strength Index"]
+    prerequisites: [trend]
+
+  - id: kdj
+    name: "KDJ"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "基于价格区间位置构建的随机指标，常用于观察短期超买超卖。"
+    aliases: ["随机指标"]
+    prerequisites: [k-line]
+
+  - id: bollinger-bands
+    name: "布林带"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "由均线及上下标准差通道构成的技术指标，用于观察波动区间。"
+    aliases: ["BOLL", "Bollinger Bands"]
+    prerequisites: [moving-average, volatility]
+
+  - id: volume-price-analysis
+    name: "量价关系"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "结合成交量与价格变化观察市场行为的方法。"
+    aliases: ["价量分析", "Volume-Price Analysis"]
+    prerequisites: [volume, k-line]
+
+  - id: golden-cross
+    name: "金叉"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "短期指标向上穿越长期指标的技术形态。"
+    aliases: ["Golden Cross"]
+    prerequisites: [moving-average, macd]
+
+  - id: death-cross
+    name: "死叉"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "短期指标向下穿越长期指标的技术形态。"
+    aliases: ["Death Cross"]
+    prerequisites: [moving-average, macd]
+
+  - id: divergence
+    name: "背离"
+    category: "技术分析"
+    difficulty: advanced
+    description: "价格走势与技术指标走势方向不一致的现象。"
+    aliases: ["Divergence"]
+    prerequisites: [trend, macd, rsi]
+
+  - id: overbought
+    name: "超买"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "技术指标显示价格短期上涨力量可能过强的状态。"
+    aliases: ["Overbought"]
+    prerequisites: [rsi, kdj]
+
+  - id: oversold
+    name: "超卖"
+    category: "技术分析"
+    difficulty: intermediate
+    description: "技术指标显示价格短期下跌力量可能过强的状态。"
+    aliases: ["Oversold"]
+    prerequisites: [rsi, kdj]
+
+  - id: position
+    name: "仓位"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "投资资金中已投入某类资产或某只证券的比例或金额。"
+    aliases: ["持仓比例", "Position"]
+    prerequisites: [brokerage-account]
+
+  - id: full-position
+    name: "满仓"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "可投资资金基本全部投入证券或资产的状态。"
+    aliases: ["Full Position"]
+    prerequisites: [position]
+
+  - id: empty-position
+    name: "空仓"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "投资组合中基本不持有风险资产、以现金为主的状态。"
+    aliases: ["Empty Position", "清仓状态"]
+    prerequisites: [position]
+
+  - id: light-position
+    name: "轻仓"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "持有风险资产比例较低的仓位状态。"
+    aliases: ["低仓位", "Light Position"]
+    prerequisites: [position]
+
+  - id: heavy-position
+    name: "重仓"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "持有某一资产或整体风险资产比例较高的仓位状态。"
+    aliases: ["高仓位", "Heavy Position"]
+    prerequisites: [position]
+
+  - id: cash-position
+    name: "现金仓位"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "组合中以现金或类现金形式持有的比例。"
+    aliases: ["现金比例", "Cash Position"]
+    prerequisites: [position]
+
+  - id: cost-basis
+    name: "持仓成本"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "持有证券的买入成本或摊薄后的平均成本。"
+    aliases: ["成本价", "Cost Basis"]
+    prerequisites: [position]
+
+  - id: profit-loss
+    name: "盈亏"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "投资收益与成本之间的差额。"
+    aliases: ["损益", "P&L", "Profit and Loss"]
+    prerequisites: [cost-basis]
+
+  - id: floating-profit-loss
+    name: "浮动盈亏"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "未卖出持仓按当前价格计算的账面盈亏。"
+    aliases: ["账面盈亏", "Unrealized P&L"]
+    prerequisites: [profit-loss, last-price]
+
+  - id: stop-loss
+    name: "止损"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "当亏损或风险达到预设条件时卖出或降低风险敞口的行为。"
+    aliases: ["Stop Loss"]
+    prerequisites: [profit-loss, risk-management]
+
+  - id: take-profit
+    name: "止盈"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "当收益达到预设条件时卖出或降低风险敞口的行为。"
+    aliases: ["Take Profit"]
+    prerequisites: [profit-loss, risk-management]
+
+  - id: drawdown
+    name: "回撤"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "资产净值从阶段高点下跌到后续低点的幅度。"
+    aliases: ["Drawdown"]
+    prerequisites: [profit-loss]
+
+  - id: max-drawdown
+    name: "最大回撤"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "观察期内资产净值从高点到低点的最大下跌幅度。"
+    aliases: ["Maximum Drawdown", "MDD"]
+    prerequisites: [drawdown]
+
+  - id: volatility
+    name: "波动率"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "价格或收益率波动程度的统计指标。"
+    aliases: ["Volatility"]
+    prerequisites: [profit-loss]
+
+  - id: beta
+    name: "贝塔"
+    category: "组合与风控"
+    difficulty: advanced
+    description: "衡量资产相对于市场整体波动敏感度的指标。"
+    aliases: ["Beta", "β"]
+    prerequisites: [benchmark, volatility]
+
+  - id: alpha
+    name: "阿尔法"
+    category: "组合与风控"
+    difficulty: advanced
+    description: "剔除市场或基准影响后投资组合获得的超额收益。"
+    aliases: ["Alpha", "α"]
+    prerequisites: [benchmark, beta]
+
+  - id: sharpe-ratio
+    name: "夏普比率"
+    category: "组合与风控"
+    difficulty: advanced
+    description: "衡量单位总风险所获得超额收益的指标。"
+    aliases: ["Sharpe Ratio"]
+    prerequisites: [volatility, risk-free-rate]
+
+  - id: risk-return
+    name: "风险收益比"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "潜在收益与潜在风险之间的比较关系。"
+    aliases: ["Risk-Reward Ratio", "盈亏比"]
+    prerequisites: [profit-loss, risk-management]
+
+  - id: diversification
+    name: "分散投资"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "将资金配置到不同资产、行业或标的以降低单一风险影响的方法。"
+    aliases: ["Diversification"]
+    prerequisites: [position]
+
+  - id: asset-allocation
+    name: "资产配置"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "在股票、债券、现金、基金等资产类别之间分配资金的过程。"
+    aliases: ["Asset Allocation"]
+    prerequisites: [diversification, position]
+
+  - id: rebalancing
+    name: "再平衡"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "将组合权重调整回目标配置比例的过程。"
+    aliases: ["Rebalancing"]
+    prerequisites: [asset-allocation]
+
+  - id: excess-return
+    name: "超额收益"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "投资组合收益超过基准收益的部分。"
+    aliases: ["Excess Return"]
+    prerequisites: [benchmark]
+
+  - id: correlation
+    name: "相关性"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "两个资产收益变化方向和程度之间的统计关系。"
+    aliases: ["Correlation"]
+    prerequisites: [diversification]
+
+  - id: concentration-risk
+    name: "集中度风险"
+    category: "风险类型"
+    difficulty: intermediate
+    description: "资金过度集中于少数标的、行业或风格导致的风险。"
+    aliases: ["Concentration Risk"]
+    prerequisites: [position, diversification]
+
+  - id: liquidity-risk
+    name: "流动性风险"
+    category: "风险类型"
+    difficulty: intermediate
+    description: "无法以合理价格及时买入或卖出资产的风险。"
+    aliases: ["Liquidity Risk"]
+    prerequisites: [spread, volume]
+
+  - id: market-risk
+    name: "市场风险"
+    category: "风险类型"
+    difficulty: beginner
+    description: "因市场整体价格变化导致资产价值波动的风险。"
+    aliases: ["系统性风险", "Market Risk"]
+    prerequisites: [stock]
+
+  - id: credit-risk
+    name: "信用风险"
+    category: "风险类型"
+    difficulty: intermediate
+    description: "债务人或交易对手无法按约履行义务造成损失的风险。"
+    aliases: ["违约风险", "Credit Risk"]
+    prerequisites: [bond]
+
+  - id: operational-risk
+    name: "操作风险"
+    category: "风险类型"
+    difficulty: beginner
+    description: "由于流程、系统、人员或外部事件导致损失的风险。"
+    aliases: ["Operational Risk"]
+    prerequisites: [trading-account]
+
+  - id: black-swan
+    name: "黑天鹅"
+    category: "风险类型"
+    difficulty: intermediate
+    description: "难以预测但影响重大的极端事件。"
+    aliases: ["Black Swan"]
+    prerequisites: [market-risk]
+
+  - id: tail-risk
+    name: "尾部风险"
+    category: "风险类型"
+    difficulty: advanced
+    description: "发生概率较低但损失可能极大的极端风险。"
+    aliases: ["Tail Risk"]
+    prerequisites: [market-risk, volatility]
+
+  - id: risk-tolerance
+    name: "风险承受能力"
+    category: "风险类型"
+    difficulty: beginner
+    description: "投资者在财务、心理和投资期限上承受亏损或波动的能力。"
+    aliases: ["Risk Tolerance"]
+    prerequisites: [market-risk]
+
+  - id: investment-horizon
+    name: "投资期限"
+    category: "组合与风控"
+    difficulty: beginner
+    description: "投资者计划持有资产或实现目标所对应的时间长度。"
+    aliases: ["Investment Horizon"]
+    prerequisites: []
+
+  - id: risk-management
+    name: "风险管理"
+    category: "组合与风控"
+    difficulty: intermediate
+    description: "识别、衡量、控制和复盘投资风险的过程。"
+    aliases: ["风控", "Risk Management"]
+    prerequisites: [market-risk, risk-tolerance]
+
+  - id: bull-market
+    name: "牛市"
+    category: "市场周期"
+    difficulty: beginner
+    description: "市场整体持续上涨、投资者情绪较为乐观的阶段。"
+    aliases: ["多头市场", "Bull Market"]
+    prerequisites: [market-risk]
+
+  - id: bear-market
+    name: "熊市"
+    category: "市场周期"
+    difficulty: beginner
+    description: "市场整体持续下跌、投资者情绪较为悲观的阶段。"
+    aliases: ["空头市场", "Bear Market"]
+    prerequisites: [market-risk]
+
+  - id: bull-bear-cycle
+    name: "牛熊周期"
+    category: "市场周期"
+    difficulty: intermediate
+    description: "市场在牛市、熊市和震荡阶段之间切换的长期过程。"
+    aliases: ["Market Cycle"]
+    prerequisites: [bull-market, bear-market]
+
+  - id: market-sentiment
+    name: "市场情绪"
+    category: "市场周期"
+    difficulty: beginner
+    description: "投资者群体对市场前景的总体心理状态。"
+    aliases: ["Sentiment", "情绪面"]
+    prerequisites: [bull-market, bear-market]
+
+  - id: panic-selling
+    name: "恐慌性抛售"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者因恐惧快速卖出资产并导致价格大幅波动的现象。"
+    aliases: ["Panic Selling"]
+    prerequisites: [market-sentiment, bear-market]
+
+  - id: herd-effect
+    name: "羊群效应"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者在不充分独立判断的情况下跟随群体行为的现象。"
+    aliases: ["Herding", "从众效应"]
+    prerequisites: [market-sentiment]
+
+  - id: fomo
+    name: "FOMO"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "因害怕错过上涨机会而冲动买入的心理状态。"
+    aliases: ["错失恐惧", "Fear of Missing Out"]
+    prerequisites: [market-sentiment]
+
+  - id: loss-aversion
+    name: "损失厌恶"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者对亏损的痛感通常强于同等收益带来的愉悦感。"
+    aliases: ["Loss Aversion"]
+    prerequisites: [profit-loss]
+
+  - id: anchoring-effect
+    name: "锚定效应"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者过度依赖某一初始价格、成本或观点进行判断的心理偏差。"
+    aliases: ["Anchoring"]
+    prerequisites: [cost-basis]
+
+  - id: confirmation-bias
+    name: "确认偏误"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者倾向于寻找支持已有观点的信息而忽视相反证据。"
+    aliases: ["Confirmation Bias"]
+    prerequisites: [market-sentiment]
+
+  - id: overconfidence
+    name: "过度自信"
+    category: "行为金融"
+    difficulty: intermediate
+    description: "投资者高估自身判断能力或低估市场不确定性的心理偏差。"
+    aliases: ["Overconfidence"]
+    prerequisites: [risk-management]
+
+  - id: mean-reversion
+    name: "均值回归"
+    category: "投资方法"
+    difficulty: advanced
+    description: "价格、估值或收益率在偏离长期均值后有回归倾向的假设或现象。"
+    aliases: ["Mean Reversion"]
+    prerequisites: [valuation, historical-percentile]
+
+  - id: momentum
+    name: "动量"
+    category: "投资方法"
+    difficulty: advanced
+    description: "价格或收益趋势在一段时间内延续的现象或策略因子。"
+    aliases: ["Momentum"]
+    prerequisites: [trend]
+
+  - id: rotation
+    name: "风格轮动"
+    category: "投资方法"
+    difficulty: advanced
+    description: "市场资金在成长、价值、大盘、小盘等风格之间切换的现象。"
+    aliases: ["Style Rotation"]
+    prerequisites: [growth-stock, value-stock]
+
+  - id: sector-rotation
+    name: "板块轮动"
+    category: "投资方法"
+    difficulty: intermediate
+    description: "资金和表现优势在不同板块之间切换的现象。"
+    aliases: ["Sector Rotation"]
+    prerequisites: [sector]
+
+  - id: macro-economy
+    name: "宏观经济"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "从整体层面观察经济增长、通胀、利率、就业和政策等因素。"
+    aliases: ["Macro Economy"]
+    prerequisites: []
+
+  - id: gdp
+    name: "GDP"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "国内生产总值，用于衡量一定时期内一个经济体生产活动的总规模。"
+    aliases: ["国内生产总值", "Gross Domestic Product"]
+    prerequisites: [macro-economy]
+
+  - id: cpi
+    name: "CPI"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "居民消费价格指数，用于观察居民消费价格水平变化。"
+    aliases: ["消费者价格指数", "居民消费价格指数"]
+    prerequisites: [macro-economy]
+
+  - id: ppi
+    name: "PPI"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "工业生产者出厂价格指数，用于观察生产端价格变化。"
+    aliases: ["生产者价格指数", "工业生产者出厂价格指数"]
+    prerequisites: [macro-economy]
+
+  - id: interest-rate
+    name: "利率"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "资金使用成本或收益率的重要价格变量，会影响估值和资产配置。"
+    aliases: ["Interest Rate"]
+    prerequisites: [macro-economy]
+
+  - id: monetary-policy
+    name: "货币政策"
+    category: "宏观与行业"
+    difficulty: intermediate
+    description: "中央银行通过利率、准备金、公开市场操作等工具调节货币和信用环境的政策。"
+    aliases: ["Monetary Policy"]
+    prerequisites: [interest-rate, liquidity]
+
+  - id: fiscal-policy
+    name: "财政政策"
+    category: "宏观与行业"
+    difficulty: intermediate
+    description: "政府通过税收、支出和债务安排影响经济运行的政策。"
+    aliases: ["Fiscal Policy"]
+    prerequisites: [macro-economy]
+
+  - id: liquidity
+    name: "流动性"
+    category: "宏观与行业"
+    difficulty: intermediate
+    description: "资金在市场中获取和流转的便利程度，既可指宏观资金环境，也可指资产交易便利性。"
+    aliases: ["Liquidity"]
+    prerequisites: [macro-economy]
+
+  - id: exchange-rate
+    name: "汇率"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "两种货币之间的兑换比率。"
+    aliases: ["Exchange Rate"]
+    prerequisites: [rmb, usd]
+
+  - id: credit-cycle
+    name: "信用周期"
+    category: "宏观与行业"
+    difficulty: advanced
+    description: "经济中信用扩张和收缩交替出现的过程。"
+    aliases: ["Credit Cycle"]
+    prerequisites: [macro-economy, credit-risk]
+
+  - id: business-cycle
+    name: "经济周期"
+    category: "宏观与行业"
+    difficulty: intermediate
+    description: "经济活动在扩张、放缓、衰退和复苏之间波动的过程。"
+    aliases: ["Business Cycle"]
+    prerequisites: [macro-economy, gdp]
+
+  - id: industry-chain
+    name: "产业链"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "从上游原材料到中游制造、下游销售或服务的产业协作关系。"
+    aliases: ["Industry Chain", "产业链条"]
+    prerequisites: [industry]
+
+  - id: supply-demand
+    name: "供需关系"
+    category: "宏观与行业"
+    difficulty: beginner
+    description: "商品、服务或资产的供给与需求之间的关系。"
+    aliases: ["Supply and Demand"]
+    prerequisites: [industry]
+
+  - id: moat
+    name: "护城河"
+    category: "基本面分析"
+    difficulty: intermediate
+    description: "公司长期维持竞争优势和盈利能力的结构性因素。"
+    aliases: ["Economic Moat", "竞争壁垒"]
+    prerequisites: [competitive-advantage]
+
+  - id: competitive-advantage
+    name: "竞争优势"
+    category: "基本面分析"
+    difficulty: intermediate
+    description: "公司相对于竞争对手在成本、品牌、技术、渠道或资源上的优势。"
+    aliases: ["Competitive Advantage"]
+    prerequisites: [industry]
+
+  - id: market-share
+    name: "市占率"
+    category: "基本面分析"
+    difficulty: intermediate
+    description: "公司销售额或销量在所属市场中的占比。"
+    aliases: ["市场份额", "Market Share"]
+    prerequisites: [industry, revenue]
+
+  - id: cyclicality
+    name: "周期性"
+    category: "基本面分析"
+    difficulty: intermediate
+    description: "业务表现随经济、行业或商品价格周期波动的特征。"
+    aliases: ["Cyclicality"]
+    prerequisites: [business-cycle, cyclical-stock]
+
+  - id: fundamental-analysis
+    name: "基本面分析"
+    category: "投资方法"
+    difficulty: beginner
+    description: "通过公司财务、行业、竞争力、管理层和估值等因素分析投资价值的方法。"
+    aliases: ["Fundamental Analysis"]
+    prerequisites: [financial-report, valuation]
+
+  - id: technical-analysis
+    name: "技术分析"
+    category: "投资方法"
+    difficulty: beginner
+    description: "通过价格、成交量和技术指标研究市场行为的方法。"
+    aliases: ["Technical Analysis"]
+    prerequisites: [k-line, volume]
+
+  - id: quantitative-investing
+    name: "量化投资"
+    category: "高级策略"
+    difficulty: advanced
+    description: "使用数据、模型和程序化规则进行投资决策和组合管理的方法。"
+    aliases: ["Quant", "Quantitative Investing"]
+    prerequisites: [strategy, backtest]
+
+  - id: factor
+    name: "因子"
+    category: "高级策略"
+    difficulty: advanced
+    description: "用于解释或预测资产收益、风险或特征的量化变量。"
+    aliases: ["Factor"]
+    prerequisites: [quantitative-investing]
+
+  - id: factor-model
+    name: "因子模型"
+    category: "高级策略"
+    difficulty: advanced
+    description: "使用多个因子解释资产收益或构建投资组合的模型。"
+    aliases: ["Factor Model"]
+    prerequisites: [factor]
+
+  - id: backtest
+    name: "回测"
+    category: "高级策略"
+    difficulty: advanced
+    description: "使用历史数据检验投资策略规则表现的过程。"
+    aliases: ["Backtest"]
+    prerequisites: [strategy, benchmark]
+
+  - id: overfitting
+    name: "过拟合"
+    category: "高级策略"
+    difficulty: advanced
+    description: "模型过度适配历史样本，导致未来泛化能力下降的问题。"
+    aliases: ["Overfitting"]
+    prerequisites: [backtest]
+
+  - id: look-ahead-bias
+    name: "未来函数"
+    category: "高级策略"
+    difficulty: advanced
+    description: "回测中错误使用当时不可得的未来信息，导致结果虚高的偏差。"
+    aliases: ["前视偏差", "Look-ahead Bias"]
+    prerequisites: [backtest]
+
+  - id: survivorship-bias
+    name: "幸存者偏差"
+    category: "高级策略"
+    difficulty: advanced
+    description: "样本只保留幸存对象而忽视已退出对象，导致分析结论偏差的问题。"
+    aliases: ["Survivorship Bias"]
+    prerequisites: [backtest]
+
+  - id: strategy
+    name: "策略"
+    category: "高级策略"
+    difficulty: intermediate
+    description: "按照明确规则进行选股、买卖、仓位和风控管理的方法体系。"
+    aliases: ["投资策略", "Strategy"]
+    prerequisites: [risk-management]
+
+  - id: signal
+    name: "信号"
+    category: "高级策略"
+    difficulty: advanced
+    description: "策略中触发买入、卖出、调仓或风控动作的数据条件。"
+    aliases: ["交易信号", "Signal"]
+    prerequisites: [strategy]
+
+  - id: rebalance-frequency
+    name: "调仓频率"
+    category: "高级策略"
+    difficulty: advanced
+    description: "投资组合按规则进行调整的时间间隔或触发频率。"
+    aliases: ["Rebalance Frequency"]
+    prerequisites: [rebalancing, strategy]
+
+  - id: portfolio-optimization
+    name: "组合优化"
+    category: "高级策略"
+    difficulty: advanced
+    description: "在收益、风险、约束和成本之间寻找组合权重方案的方法。"
+    aliases: ["Portfolio Optimization"]
+    prerequisites: [asset-allocation, correlation]
+
+  - id: risk-parity
+    name: "风险平价"
+    category: "高级策略"
+    difficulty: advanced
+    description: "按不同资产对组合风险的贡献分配权重的资产配置方法。"
+    aliases: ["Risk Parity"]
+    prerequisites: [portfolio-optimization, volatility]
+
+  - id: dollar-cost-averaging
+    name: "定投"
+    category: "投资方法"
+    difficulty: beginner
+    description: "按固定时间或规则分批投入资金的投资方式。"
+    aliases: ["DCA", "定期定额投资"]
+    prerequisites: [investment-horizon]
+
+  - id: grid-trading
+    name: "网格交易"
+    category: "高级策略"
+    difficulty: advanced
+    description: "在预设价格区间内分层买入和卖出的交易策略。"
+    aliases: ["Grid Trading"]
+    prerequisites: [strategy, sideways]
+
+  - id: pairs-trading
+    name: "配对交易"
+    category: "高级策略"
+    difficulty: advanced
+    description: "选择相关性较高的两个资产，同时做多和做空以捕捉价差变化的策略。"
+    aliases: ["Pairs Trading"]
+    prerequisites: [correlation, short-selling]
+
+  - id: arbitrage
+    name: "套利"
+    category: "高级策略"
+    difficulty: advanced
+    description: "利用不同市场、品种或价格之间的不一致获取价差收益的交易方式。"
+    aliases: ["Arbitrage"]
+    prerequisites: [spread, transaction-cost]
+
+  - id: event-driven
+    name: "事件驱动"
+    category: "高级策略"
+    difficulty: advanced
+    description: "围绕并购、重组、业绩、政策等特定事件构建投资机会的策略。"
+    aliases: ["Event Driven"]
+    prerequisites: [strategy, information-disclosure]
+
+  - id: bond
+    name: "债券"
+    category: "资产类别"
+    difficulty: beginner
+    description: "发行人按约定还本付息的债务融资工具。"
+    aliases: ["Bond"]
+    prerequisites: [securities]
+
+  - id: reit
+    name: "REITs"
+    category: "资产类别"
+    difficulty: intermediate
+    description: "以基础设施或不动产相关资产为底层、向投资者分配收益的证券化产品。"
+    aliases: ["不动产投资信托基金", "基础设施公募REITs"]
+    prerequisites: [fund, securities]
+
+  - id: crypto
+    name: "加密货币"
+    category: "资产类别"
+    difficulty: advanced
+    description: "基于密码学和分布式账本等技术形成的数字资产。"
+    aliases: ["数字货币", "Crypto"]
+    prerequisites: [market-risk]
+
+  - id: derivative
+    name: "衍生品"
+    category: "衍生品"
+    difficulty: advanced
+    description: "价值来源于股票、指数、利率、商品等基础资产的金融工具。"
+    aliases: ["Derivative"]
+    prerequisites: [securities, market-risk]
+
+  - id: futures
+    name: "期货"
+    category: "衍生品"
+    difficulty: advanced
+    description: "买卖双方约定在未来按特定价格交割标的资产或现金结算的标准化合约。"
+    aliases: ["Futures"]
+    prerequisites: [derivative, leverage]
+
+  - id: stock-index-futures
+    name: "股指期货"
+    category: "衍生品"
+    difficulty: advanced
+    description: "以股票指数为标的的期货合约。"
+    aliases: ["Index Futures"]
+    prerequisites: [futures, stock-index]
+
+  - id: options
+    name: "期权"
+    category: "衍生品"
+    difficulty: advanced
+    description: "赋予买方在未来按约定价格买入或卖出标的资产权利的合约。"
+    aliases: ["Options"]
+    prerequisites: [derivative]
+
+  - id: call-option
+    name: "认购期权"
+    category: "衍生品"
+    difficulty: advanced
+    description: "赋予持有人按约定价格买入标的资产权利的期权。"
+    aliases: ["看涨期权", "Call Option"]
+    prerequisites: [options]
+
+  - id: put-option
+    name: "认沽期权"
+    category: "衍生品"
+    difficulty: advanced
+    description: "赋予持有人按约定价格卖出标的资产权利的期权。"
+    aliases: ["看跌期权", "Put Option"]
+    prerequisites: [options]
+
+  - id: leverage
+    name: "杠杆"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "通过借入资金或使用衍生品放大资产收益和亏损波动的机制。"
+    aliases: ["Leverage"]
+    prerequisites: [market-risk]
+
+  - id: margin
+    name: "保证金"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "进行杠杆或衍生品交易时按规则缴纳的履约资金。"
+    aliases: ["Margin"]
+    prerequisites: [leverage]
+
+  - id: liquidation
+    name: "强制平仓"
+    category: "杠杆交易"
+    difficulty: advanced
+    description: "当保证金或风险指标不满足要求时，交易方被强制了结持仓的行为。"
+    aliases: ["强平", "Liquidation"]
+    prerequisites: [margin, leverage]
+
+  - id: hedging
+    name: "对冲"
+    category: "衍生品"
+    difficulty: advanced
+    description: "通过持有相关资产或衍生品来降低特定风险敞口的行为。"
+    aliases: ["Hedge", "Hedging"]
+    prerequisites: [derivative, risk-management]
+
+  - id: information-disclosure
+    name: "信息披露"
+    category: "监管与治理"
+    difficulty: beginner
+    description: "上市公司和相关主体按规则公开披露重要信息的制度。"
+    aliases: ["Disclosure"]
+    prerequisites: [listed-company]
+
+  - id: insider-trading
+    name: "内幕交易"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "利用未公开重大信息进行证券交易的违法违规行为。"
+    aliases: ["Insider Trading"]
+    prerequisites: [information-disclosure]
+
+  - id: market-manipulation
+    name: "市场操纵"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "通过虚假申报、拉抬打压、对倒等方式影响证券价格或交易量的违法违规行为。"
+    aliases: ["Manipulation", "操纵市场"]
+    prerequisites: [secondary-market]
+
+  - id: suitability
+    name: "投资者适当性"
+    category: "监管与治理"
+    difficulty: beginner
+    description: "金融机构根据投资者风险承受能力和产品风险等级匹配服务或产品的制度。"
+    aliases: ["适当性管理", "Suitability"]
+    prerequisites: [risk-tolerance]
+
+  - id: registration-system
+    name: "注册制"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "以信息披露为核心的证券发行上市审核注册制度。"
+    aliases: ["Registration-based IPO System"]
+    prerequisites: [ipo, information-disclosure]
+
+  - id: approval-system
+    name: "核准制"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "证券发行上市需要经监管机构实质性审核核准的制度。"
+    aliases: ["Approval System"]
+    prerequisites: [ipo]
+
+  - id: corporate-governance
+    name: "公司治理"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "公司股东、董事会、管理层和其他利益相关方之间的权责安排和制衡机制。"
+    aliases: ["Corporate Governance"]
+    prerequisites: [listed-company, shareholder]
+
+  - id: related-party-transaction
+    name: "关联交易"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "公司与关联方之间发生的交易，需关注定价公允性和利益输送风险。"
+    aliases: ["Related-party Transaction"]
+    prerequisites: [corporate-governance]
+
+  - id: pledged-shares
+    name: "股权质押"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "股东将持有股份作为担保进行融资的行为。"
+    aliases: ["股份质押", "Share Pledge"]
+    prerequisites: [shareholder, share]
+
+  - id: shareholder-reduction
+    name: "减持"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "股东减少其持有上市公司股份的行为。"
+    aliases: ["股东减持", "Shareholder Selling"]
+    prerequisites: [shareholder]
+
+  - id: shareholder-increase
+    name: "增持"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "股东增加其持有上市公司股份的行为。"
+    aliases: ["股东增持", "Shareholder Buying"]
+    prerequisites: [shareholder]
+
+  - id: lock-up-period
+    name: "限售期"
+    category: "监管与治理"
+    difficulty: intermediate
+    description: "特定股份在规定期限内不得自由转让的期间。"
+    aliases: ["锁定期", "Lock-up Period"]
+    prerequisites: [share]
+
+  - id: earnings-guidance
+    name: "业绩预告"
+    category: "信息披露"
+    difficulty: intermediate
+    description: "上市公司在正式报告前对业绩变化情况进行的预先披露。"
+    aliases: ["业绩预告公告"]
+    prerequisites: [information-disclosure, financial-report]
+
+  - id: earnings-preview
+    name: "业绩快报"
+    category: "信息披露"
+    difficulty: intermediate
+    description: "上市公司在定期报告前披露的主要财务数据和经营结果。"
+    aliases: ["Earnings Preview"]
+    prerequisites: [information-disclosure, financial-report]
+
+  - id: audit-opinion
+    name: "审计意见"
+    category: "信息披露"
+    difficulty: intermediate
+    description: "审计机构对公司财务报表真实性和公允性发表的专业意见类型。"
+    aliases: ["Audit Opinion"]
+    prerequisites: [annual-report, financial-report]

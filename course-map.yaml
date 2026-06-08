@@ -1,0 +1,636 @@
+version: 1
+title: "A股投资知识学习网站课程地图"
+audience: "零基础投资新手"
+current_scope: "A股从零基础到独立分析、独立决策、独立复盘的完整闭环"
+future_scope: ["港股", "美股", "币圈", "ETF", "基金", "债券", "REITs", "量化投资"]
+planning_documents:
+  component_spec: "component-spec.md"
+  glossary: "glossary.yaml"
+  chapter_spec_index: "chapter-spec-index.yaml"
+
+global_rules:
+  no_course_body: true
+  progressive_learning: true
+  first_appearance_rule: "术语第一次出现的章节必须用自然语言解释；解释只能出现在该术语的 first_terms 所属章节。"
+  repeat_reference_rule: "术语在首次解释后的所有章节中，必须使用 <Term id=\"term-id\" /> 引用，不得重复定义。"
+  term_component:
+    required_markup: "<Term id=\"pe\" />"
+    implementation_note: "Term 是面向正文作者的统一术语引用组件，可由 component-spec.md 中的 InvestTerm 封装或别名实现。"
+  chart_policy:
+    moderate_use: true
+    priority: "优先用于第一次出现的重要抽象概念，例如市场结构、K线、指数构成、三张财报、估值倍数、组合风险。"
+    default_max_charts_per_chapter: 1
+    allow_zero_chart_chapters: true
+  generation_policy:
+    batchable: true
+    require_chapter_spec: true
+    require_glossary_validation: true
+    require_component_validation: true
+    forbid_unplanned_new_terms: true
+    forbid_future_scope_body_in_current_a_share_path: true
+
+batches:
+  - id: batch-00
+    title: "站点规则与学习入口"
+    chapters: [c00-01]
+  - id: batch-01
+    title: "从证券到A股市场"
+    chapters: [c01-01, c01-02, c01-03, c01-04]
+  - id: batch-02
+    title: "账户、交易与仓位"
+    chapters: [c02-01, c02-02, c02-03, c02-04, c02-05, c02-06, c02-07, c02-08]
+  - id: batch-03
+    title: "行情、K线与技术分析入门"
+    chapters: [c03-01, c03-02, c03-03, c03-04]
+  - id: batch-04
+    title: "指数、ETF与资产边界"
+    chapters: [c04-01, c04-02, c04-03, c04-04, c04-05]
+  - id: batch-05
+    title: "财报阅读闭环"
+    chapters: [c05-01, c05-02, c05-03, c05-04, c05-05]
+  - id: batch-06
+    title: "公司与行业基本面"
+    chapters: [c06-01, c06-02, c06-03, c06-04]
+  - id: batch-07
+    title: "估值体系"
+    chapters: [c07-01, c07-02, c07-03]
+  - id: batch-08
+    title: "宏观、周期与市场情绪"
+    chapters: [c08-01, c08-02, c08-03, c08-04]
+  - id: batch-09
+    title: "组合、风控与行为偏差"
+    chapters: [c09-01, c09-02, c09-03]
+  - id: batch-10
+    title: "投资方法与独立决策"
+    chapters: [c10-01, c10-02, c10-03]
+  - id: batch-11
+    title: "高级边界与未来扩展接口"
+    chapters: [c11-01, c11-02, c11-03]
+
+modules:
+  - id: m00
+    title: "学习约定"
+    stage: "prelude"
+    goal: "建立站点使用、术语引用、风险提示和正文生成边界。"
+    chapters:
+      - id: c00-01
+        title: "如何使用本网站和术语体系"
+        path: "/course/00-start/how-to-use"
+        batch: batch-00
+        difficulty: beginner
+        first_terms: []
+        components: [BaseCallout, InvestRiskNotice, LearnProgress]
+        chart_slots: []
+
+  - id: m01
+    title: "从证券到A股市场"
+    stage: "foundation"
+    goal: "先理解证券、股票、公司权益和A股边界，再进入交易。"
+    chapters:
+      - id: c01-01
+        title: "证券、股票与公司权益"
+        path: "/course/01-foundation/securities-stock-equity"
+        batch: batch-01
+        difficulty: beginner
+        first_terms: [securities, stock, share, listed-company, shareholder, equity, market-cap, total-share-capital, free-float, float-market-cap]
+        components: [Term, BaseCallout, InvestSecurityCard, VizProcessFlow]
+        chart_slots:
+          - id: ownership-flow
+            component: VizProcessFlow
+            purpose: "第一次抽象展示公司、股份、股东、股票之间的关系。"
+      - id: c01-02
+        title: "A股市场与交易场所"
+        path: "/course/01-foundation/a-share-market-structure"
+        batch: batch-01
+        difficulty: beginner
+        first_terms: [a-share, shanghai-stock-exchange, shenzhen-stock-exchange, main-board, beijing-stock-exchange, neeq]
+        components: [Term, BaseCompareMatrix, VizChart]
+        chart_slots:
+          - id: a-share-venue-map
+            component: BaseCompareMatrix
+            purpose: "第一次对比A股主要交易场所和板块。"
+      - id: c01-03
+        title: "跨市场名称与未来扩展边界"
+        path: "/course/01-foundation/cross-market-vocabulary"
+        batch: batch-01
+        difficulty: beginner
+        status: "bridge_only"
+        first_terms: [b-share, hk-stock, h-share, us-stock, hong-kong-stock-exchange, nyse, nasdaq, stock-connect, northbound-trading, southbound-trading, qfii, rmb, hkd, usd]
+        components: [Term, InvestScenarioTabs, BaseCompareMatrix, InvestRiskNotice]
+        chart_slots:
+          - id: market-boundary-matrix
+            component: BaseCompareMatrix
+            purpose: "只建立术语边界，不展开港股、美股正文。"
+      - id: c01-04
+        title: "投资前的风险边界与学习目标"
+        path: "/course/01-foundation/risk-boundary"
+        batch: batch-01
+        difficulty: beginner
+        first_terms: [market-risk, risk-tolerance, investment-horizon, risk-management]
+        components: [Term, InvestRiskNotice, LearnReflection]
+        chart_slots:
+          - id: risk-return-positioning
+            component: VizChart
+            purpose: "第一次抽象展示风险、期限和学习目标之间的关系。"
+
+  - id: m02
+    title: "账户、交易与仓位"
+    stage: "mechanics"
+    goal: "建立真实交易前必须理解的账户、委托、规则、成本和仓位概念。"
+    chapters:
+      - id: c02-01
+        title: "证券账户、资金账户与适当性"
+        path: "/course/02-trading/accounts-suitability"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [trading-account, brokerage-account, suitability, operational-risk]
+        components: [Term, BaseCallout, InvestRiskNotice]
+        chart_slots: []
+      - id: c02-02
+        title: "交易日、交易时段与交易单位"
+        path: "/course/02-trading/calendar-session-lot"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [trading-day, trading-session, lot, t-plus-one]
+        components: [Term, VizTimeline, BaseCallout]
+        chart_slots:
+          - id: trading-day-timeline
+            component: VizTimeline
+            purpose: "第一次展示交易日内的时间结构。"
+      - id: c02-03
+        title: "委托、报价与撮合"
+        path: "/course/02-trading/orders-and-matching"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [order, tick-size, market-order, limit-order, call-auction, continuous-auction, bid, ask, spread, order-book]
+        components: [Term, VizProcessFlow, BaseCompareMatrix]
+        chart_slots:
+          - id: order-matching-flow
+            component: VizProcessFlow
+            purpose: "第一次展示委托进入市场后的撮合路径。"
+      - id: c02-04
+        title: "涨跌幅、涨停跌停与停复牌"
+        path: "/course/02-trading/price-limits-trading-status"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [price-limit, limit-up, limit-down, suspension, resumption]
+        components: [Term, InvestRiskNotice, BaseCallout]
+        chart_slots: []
+      - id: c02-05
+        title: "交易成本与滑点"
+        path: "/course/02-trading/transaction-costs"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [commission, stamp-duty, transfer-fee, slippage, transaction-cost]
+        components: [Term, VizFormula, InvestMetricBadge]
+        chart_slots:
+          - id: transaction-cost-formula
+            component: VizFormula
+            purpose: "第一次用公式呈现交易成本构成。"
+      - id: c02-06
+        title: "发行、上市制度与特殊状态"
+        path: "/course/02-trading/issuance-listing-status"
+        batch: batch-02
+        difficulty: intermediate
+        first_terms: [primary-market, secondary-market, information-disclosure, ipo, registration-system, approval-system, star-market, chinext, new-share-subscription, block-trade, lock-up-period, delisting, st-stock]
+        components: [Term, VizTimeline, InvestRiskNotice]
+        chart_slots:
+          - id: listing-lifecycle
+            component: VizTimeline
+            purpose: "第一次展示公司从发行到上市、特殊处理和退市的生命周期。"
+      - id: c02-07
+        title: "分红、送配与回购"
+        path: "/course/02-trading/corporate-actions"
+        batch: batch-02
+        difficulty: intermediate
+        first_terms: [dividend, dividend-yield, bonus-share, rights-issue, share-repurchase]
+        components: [Term, InvestMetricBadge, InvestRiskNotice]
+        chart_slots: []
+      - id: c02-08
+        title: "仓位、成本与盈亏"
+        path: "/course/02-trading/position-cost-profit-loss"
+        batch: batch-02
+        difficulty: beginner
+        first_terms: [position, full-position, empty-position, light-position, heavy-position, cash-position, cost-basis, profit-loss, last-price, floating-profit-loss]
+        components: [Term, InvestPortfolio, LearnReflection]
+        chart_slots:
+          - id: position-pie
+            component: InvestPortfolio
+            purpose: "第一次展示资金如何在现金和持仓之间分配。"
+
+  - id: m03
+    title: "行情、K线与技术分析入门"
+    stage: "market-reading"
+    goal: "只建立识读行情和技术指标的基础能力，不把技术指标包装成预测保证。"
+    chapters:
+      - id: c03-01
+        title: "价格、成交与波动"
+        path: "/course/03-market-data/price-volume-volatility"
+        batch: batch-03
+        difficulty: beginner
+        first_terms: [open-price, close-price, high-price, low-price, volume, turnover, turnover-rate, amplitude, volume-ratio, capital-flow, main-funds, level2, volatility]
+        components: [Term, VizChart, BaseDataSource]
+        chart_slots:
+          - id: ohlcv-sample
+            component: VizChart
+            purpose: "第一次展示价格、成交量和波动字段。"
+      - id: c03-02
+        title: "K线与趋势状态"
+        path: "/course/03-market-data/kline-trend"
+        batch: batch-03
+        difficulty: beginner
+        first_terms: [k-line, trend, uptrend, downtrend, sideways, pullback, rebound]
+        components: [Term, VizECharts, InvestRiskNotice]
+        chart_slots:
+          - id: kline-anatomy
+            component: VizECharts
+            purpose: "第一次展示K线的开高低收结构。"
+      - id: c03-03
+        title: "均线、支撑压力与量价关系"
+        path: "/course/03-market-data/ma-support-resistance-volume-price"
+        batch: batch-03
+        difficulty: intermediate
+        first_terms: [moving-average, support, resistance, breakout, gap, volume-price-analysis]
+        components: [Term, VizChart, InvestRiskNotice]
+        chart_slots:
+          - id: support-resistance-map
+            component: VizChart
+            purpose: "第一次展示支撑、压力和均线的图形位置。"
+      - id: c03-04
+        title: "常见技术指标边界"
+        path: "/course/03-market-data/technical-indicators"
+        batch: batch-03
+        difficulty: intermediate
+        first_terms: [macd, rsi, kdj, bollinger-bands, golden-cross, death-cross, divergence, overbought, oversold]
+        components: [Term, BaseCompareMatrix, InvestRiskNotice]
+        chart_slots:
+          - id: indicator-comparison
+            component: BaseCompareMatrix
+            purpose: "对比不同技术指标的用途和局限，避免过量画图。"
+
+  - id: m04
+    title: "指数、ETF与资产边界"
+    stage: "market-containers"
+    goal: "理解指数、基金和ETF如何把个股组织成可比较、可配置的投资对象。"
+    chapters:
+      - id: c04-01
+        title: "指数、成分股与基准"
+        path: "/course/04-index-etf/index-constituents-benchmark"
+        batch: batch-04
+        difficulty: beginner
+        first_terms: [index, stock-index, index-constituent, index-weight, benchmark]
+        components: [Term, VizChart, BaseDataSource]
+        chart_slots:
+          - id: index-weight-structure
+            component: VizChart
+            purpose: "第一次展示指数由成分股和权重构成。"
+      - id: c04-02
+        title: "A股核心指数"
+        path: "/course/04-index-etf/a-share-core-indexes"
+        batch: batch-04
+        difficulty: beginner
+        first_terms: [csi300, csi500, sse50, chinext-index]
+        components: [Term, BaseCompareMatrix]
+        chart_slots:
+          - id: core-index-matrix
+            component: BaseCompareMatrix
+            purpose: "对比A股核心指数的定位。"
+      - id: c04-03
+        title: "基金、指数基金与ETF"
+        path: "/course/04-index-etf/fund-index-fund-etf"
+        batch: batch-04
+        difficulty: beginner
+        first_terms: [fund, mutual-fund, index-fund, etf, lof, qdii]
+        components: [Term, BaseCompareMatrix, InvestRiskNotice]
+        chart_slots:
+          - id: fund-product-matrix
+            component: BaseCompareMatrix
+            purpose: "第一次对比基金、指数基金、ETF和LOF。"
+      - id: c04-04
+        title: "ETF净值、溢价折价与跟踪误差"
+        path: "/course/04-index-etf/etf-nav-premium-tracking"
+        batch: batch-04
+        difficulty: intermediate
+        first_terms: [fund-nav, premium-discount, tracking-error, expense-ratio]
+        components: [Term, VizFormula, InvestRiskNotice]
+        chart_slots:
+          - id: premium-discount-formula
+            component: VizFormula
+            purpose: "第一次用公式表达交易价格与净值的关系。"
+      - id: c04-05
+        title: "债券、REITs与加密资产的边界"
+        path: "/course/04-index-etf/adjacent-asset-boundaries"
+        batch: batch-04
+        difficulty: intermediate
+        status: "bridge_only"
+        first_terms: [bond, credit-risk, reit, crypto]
+        components: [Term, InvestScenarioTabs, InvestRiskNotice]
+        chart_slots: []
+
+  - id: m05
+    title: "财报阅读闭环"
+    stage: "financial-statements"
+    goal: "从报表结构到关键指标，建立读懂上市公司财务信息的最低闭环。"
+    chapters:
+      - id: c05-01
+        title: "财报、年报、季报与披露节点"
+        path: "/course/05-financial-reports/report-types-disclosure-calendar"
+        batch: batch-05
+        difficulty: beginner
+        first_terms: [financial-report, annual-report, quarterly-report, earnings-guidance, earnings-preview, audit-opinion]
+        components: [Term, VizTimeline, BaseDataSource]
+        chart_slots:
+          - id: disclosure-calendar
+            component: VizTimeline
+            purpose: "第一次展示上市公司定期披露节奏。"
+      - id: c05-02
+        title: "资产负债表与资产质量"
+        path: "/course/05-financial-reports/balance-sheet"
+        batch: batch-05
+        difficulty: beginner
+        first_terms: [balance-sheet, goodwill]
+        components: [Term, InvestFinancialReport, InvestRiskNotice]
+        chart_slots:
+          - id: balance-sheet-structure
+            component: InvestFinancialReport
+            purpose: "第一次展示资产、负债、权益的表格结构。"
+      - id: c05-03
+        title: "利润表与盈利质量"
+        path: "/course/05-financial-reports/income-statement-profit-quality"
+        batch: batch-05
+        difficulty: beginner
+        first_terms: [income-statement, revenue, gross-profit, gross-margin, operating-profit, net-profit, net-profit-attributable, impairment, non-recurring-profit, dividend-payout-ratio]
+        components: [Term, InvestFinancialReport, VizFormula]
+        chart_slots:
+          - id: income-statement-layers
+            component: InvestFinancialReport
+            purpose: "第一次展示收入到净利润的层级关系。"
+      - id: c05-04
+        title: "现金流量表与自由现金流"
+        path: "/course/05-financial-reports/cash-flow-statement"
+        batch: batch-05
+        difficulty: intermediate
+        first_terms: [cash-flow-statement, operating-cash-flow, capex, free-cash-flow]
+        components: [Term, InvestFinancialReport, VizFormula]
+        chart_slots:
+          - id: cash-flow-three-parts
+            component: InvestFinancialReport
+            purpose: "第一次展示经营、投资、筹资现金流结构。"
+      - id: c05-05
+        title: "每股收益、ROE与偿债周转指标"
+        path: "/course/05-financial-reports/key-financial-metrics"
+        batch: batch-05
+        difficulty: intermediate
+        first_terms: [eps, roe, roa, debt-to-asset-ratio, current-ratio, quick-ratio, inventory-turnover, accounts-receivable-turnover]
+        components: [Term, InvestMetricBadge, VizFormula]
+        chart_slots:
+          - id: roe-formula
+            component: VizFormula
+            purpose: "第一次展示ROE等核心财务指标的计算关系。"
+
+  - id: m06
+    title: "公司与行业基本面"
+    stage: "fundamentals"
+    goal: "在财报之后理解公司所处行业、竞争位置和治理风险。"
+    chapters:
+      - id: c06-01
+        title: "行业、板块、产业链与供需"
+        path: "/course/06-fundamentals/industry-sector-chain"
+        batch: batch-06
+        difficulty: beginner
+        first_terms: [sector, industry, industry-chain, supply-demand, market-share]
+        components: [Term, VizProcessFlow, BaseCompareMatrix]
+        chart_slots:
+          - id: industry-chain-flow
+            component: VizProcessFlow
+            purpose: "第一次展示上中下游关系。"
+      - id: c06-02
+        title: "竞争优势、护城河与蓝筹特征"
+        path: "/course/06-fundamentals/competitive-advantage-blue-chip"
+        batch: batch-06
+        difficulty: intermediate
+        first_terms: [competitive-advantage, moat, blue-chip]
+        components: [Term, LearnCaseStudy, BaseCompareMatrix]
+        chart_slots:
+          - id: style-matrix
+            component: BaseCompareMatrix
+            purpose: "第一次对比竞争优势、护城河和蓝筹特征。"
+      - id: c06-03
+        title: "概念股与主题投资"
+        path: "/course/06-fundamentals/concepts-and-themes"
+        batch: batch-06
+        difficulty: intermediate
+        first_terms: [thematic-investing, concept-stock]
+        components: [Term, InvestRiskNotice, LearnReflection]
+        chart_slots: []
+      - id: c06-04
+        title: "公司治理与违规风险"
+        path: "/course/06-fundamentals/corporate-governance-risk"
+        batch: batch-06
+        difficulty: intermediate
+        first_terms: [corporate-governance, related-party-transaction, pledged-shares, shareholder-reduction, shareholder-increase, insider-trading, market-manipulation]
+        components: [Term, InvestRiskNotice, LearnCaseStudy]
+        chart_slots: []
+
+  - id: m07
+    title: "估值体系"
+    stage: "valuation"
+    goal: "在理解财报和业务之后，再学习估值指标与估值方法。"
+    chapters:
+      - id: c07-01
+        title: "估值、成长价值风格与安全边际"
+        path: "/course/07-valuation/valuation-intrinsic-value-margin"
+        batch: batch-07
+        difficulty: intermediate
+        first_terms: [valuation, growth-stock, value-stock, intrinsic-value, margin-of-safety, ttm, historical-percentile, valuation-band]
+        components: [Term, VizChart, InvestRiskNotice]
+        chart_slots:
+          - id: valuation-band-chart
+            component: VizChart
+            purpose: "第一次展示估值区间和历史分位。"
+      - id: c07-02
+        title: "PE、PB、PS、PCF与PEG"
+        path: "/course/07-valuation/multiple-valuation"
+        batch: batch-07
+        difficulty: intermediate
+        first_terms: [pe, pb, relative-valuation, ps, pcf, peg, forward-pe]
+        components: [Term, VizFormula, BaseCompareMatrix]
+        chart_slots:
+          - id: valuation-multiple-formulas
+            component: VizFormula
+            purpose: "第一次集中展示估值倍数公式。"
+      - id: c07-03
+        title: "企业价值、DCF与绝对估值"
+        path: "/course/07-valuation/enterprise-value-dcf"
+        batch: batch-07
+        difficulty: advanced
+        first_terms: [ev, ebit, ebitda, ev-ebitda, risk-free-rate, equity-risk-premium, discount-rate, dcf, absolute-valuation]
+        components: [Term, VizFormula, InvestRiskNotice]
+        chart_slots:
+          - id: dcf-flow
+            component: VizProcessFlow
+            purpose: "第一次展示未来现金流折现到当前价值的流程。"
+
+  - id: m08
+    title: "宏观、周期与市场情绪"
+    stage: "macro-cycle"
+    goal: "把个股和估值放回宏观、周期、流动性和市场情绪框架中。"
+    chapters:
+      - id: c08-01
+        title: "宏观经济、增长、通胀与汇率"
+        path: "/course/08-macro/macro-growth-inflation-fx"
+        batch: batch-08
+        difficulty: beginner
+        first_terms: [macro-economy, gdp, cpi, ppi, interest-rate, exchange-rate]
+        components: [Term, VizChart, BaseDataSource]
+        chart_slots:
+          - id: macro-indicator-chart
+            component: VizChart
+            purpose: "第一次展示宏观指标作为背景变量。"
+      - id: c08-02
+        title: "货币政策、财政政策、流动性与经济周期"
+        path: "/course/08-macro/policy-liquidity-cycle"
+        batch: batch-08
+        difficulty: intermediate
+        first_terms: [liquidity, monetary-policy, fiscal-policy, business-cycle, credit-cycle]
+        components: [Term, VizTimeline, InvestRiskNotice]
+        chart_slots:
+          - id: cycle-timeline
+            component: VizTimeline
+            purpose: "第一次展示经济周期阶段。"
+      - id: c08-03
+        title: "牛市、熊市、牛熊周期与市场情绪"
+        path: "/course/08-macro/bull-bear-sentiment"
+        batch: batch-08
+        difficulty: beginner
+        first_terms: [bull-market, bear-market, bull-bear-cycle, market-sentiment, panic-selling]
+        components: [Term, VizTimeline, InvestRiskNotice]
+        chart_slots:
+          - id: bull-bear-cycle
+            component: VizTimeline
+            purpose: "第一次展示牛熊周期。"
+      - id: c08-04
+        title: "周期股、防御股、均值回归与轮动"
+        path: "/course/08-macro/style-cycle-rotation"
+        batch: batch-08
+        difficulty: advanced
+        first_terms: [cyclical-stock, defensive-stock, cyclicality, sector-rotation, mean-reversion, momentum, rotation]
+        components: [Term, BaseCompareMatrix, InvestRiskNotice]
+        chart_slots:
+          - id: rotation-matrix
+            component: BaseCompareMatrix
+            purpose: "对比不同市场阶段下的风格和板块轮动概念。"
+
+  - id: m09
+    title: "组合、风控与行为偏差"
+    stage: "portfolio-risk"
+    goal: "把单个标的分析升级为组合管理、风险度量和投资者行为管理。"
+    chapters:
+      - id: c09-01
+        title: "回撤、波动、Alpha、Beta与夏普比率"
+        path: "/course/09-portfolio/risk-return-metrics"
+        batch: batch-09
+        difficulty: advanced
+        first_terms: [diversification, correlation, drawdown, max-drawdown, beta, alpha, sharpe-ratio, excess-return]
+        components: [Term, VizChart, VizFormula]
+        chart_slots:
+          - id: drawdown-chart
+            component: VizChart
+            purpose: "第一次展示净值曲线与回撤。"
+      - id: c09-02
+        title: "分散投资、资产配置、再平衡与风险控制"
+        path: "/course/09-portfolio/allocation-risk-control"
+        batch: batch-09
+        difficulty: intermediate
+        first_terms: [risk-return, stop-loss, take-profit, asset-allocation, rebalancing, concentration-risk, liquidity-risk, black-swan, tail-risk]
+        components: [Term, InvestPortfolio, InvestRiskNotice]
+        chart_slots:
+          - id: allocation-portfolio
+            component: InvestPortfolio
+            purpose: "第一次展示组合权重和风险分散。"
+      - id: c09-03
+        title: "行为金融与常见心理偏差"
+        path: "/course/09-portfolio/behavioral-biases"
+        batch: batch-09
+        difficulty: intermediate
+        first_terms: [herd-effect, fomo, loss-aversion, anchoring-effect, confirmation-bias, overconfidence]
+        components: [Term, LearnReflection, LearnQuiz]
+        chart_slots: []
+
+  - id: m10
+    title: "投资方法与独立决策"
+    stage: "decision-system"
+    goal: "形成从分析、策略、执行到复盘的A股独立投资闭环。"
+    chapters:
+      - id: c10-01
+        title: "基本面分析、技术分析、策略与定投"
+        path: "/course/10-decision/analysis-methods-strategy"
+        batch: batch-10
+        difficulty: intermediate
+        first_terms: [fundamental-analysis, technical-analysis, strategy, dollar-cost-averaging]
+        components: [Term, BaseCompareMatrix, InvestRiskNotice]
+        chart_slots:
+          - id: method-comparison
+            component: BaseCompareMatrix
+            purpose: "对比不同投资方法的适用边界。"
+      - id: c10-02
+        title: "信号、调仓、组合优化与事件驱动"
+        path: "/course/10-decision/signals-rebalance-optimization"
+        batch: batch-10
+        difficulty: advanced
+        first_terms: [signal, rebalance-frequency, portfolio-optimization, risk-parity, event-driven]
+        components: [Term, VizProcessFlow, InvestPortfolio]
+        chart_slots:
+          - id: strategy-loop
+            component: VizProcessFlow
+            purpose: "第一次展示策略从信号到调仓再到复盘的闭环。"
+      - id: c10-03
+        title: "A股独立研究与决策工作流"
+        path: "/course/10-decision/independent-a-share-workflow"
+        batch: batch-10
+        difficulty: advanced
+        first_terms: []
+        components: [Term, LearnCaseStudy, LearnReflection, LearnQuiz, InvestRiskNotice]
+        chart_slots:
+          - id: independent-workflow
+            component: VizProcessFlow
+            purpose: "整合前序知识，不引入新术语。"
+
+  - id: m11
+    title: "高级边界与未来扩展接口"
+    stage: "advanced-boundary"
+    goal: "只建立高级工具和未来扩展模块的风险边界，不替代当前A股主线。"
+    chapters:
+      - id: c11-01
+        title: "融资融券、杠杆与强制平仓"
+        path: "/course/11-advanced/leverage-margin-short-selling"
+        batch: batch-11
+        difficulty: advanced
+        first_terms: [leverage, margin-trading, short-selling, securities-lending, margin, liquidation]
+        components: [Term, InvestRiskNotice, BaseCompareMatrix]
+        chart_slots:
+          - id: leverage-risk-flow
+            component: VizProcessFlow
+            purpose: "第一次展示杠杆放大收益与亏损的路径。"
+      - id: c11-02
+        title: "衍生品、期货、期权与对冲"
+        path: "/course/11-advanced/derivatives-futures-options-hedging"
+        batch: batch-11
+        difficulty: advanced
+        first_terms: [derivative, futures, stock-index-futures, options, call-option, put-option, hedging]
+        components: [Term, InvestRiskNotice, BaseCompareMatrix]
+        chart_slots:
+          - id: derivatives-boundary-matrix
+            component: BaseCompareMatrix
+            purpose: "只建立工具边界和风险差异。"
+      - id: c11-03
+        title: "量化、回测、因子与策略偏差"
+        path: "/course/11-advanced/quant-backtest-factor-bias"
+        batch: batch-11
+        difficulty: advanced
+        first_terms: [backtest, quantitative-investing, factor, factor-model, overfitting, look-ahead-bias, survivorship-bias, grid-trading, pairs-trading, arbitrage]
+        components: [Term, VizProcessFlow, InvestRiskNotice]
+        chart_slots:
+          - id: backtest-bias-flow
+            component: VizProcessFlow
+            purpose: "第一次展示回测从规则到偏差检查的流程。"

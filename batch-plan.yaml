@@ -1,0 +1,542 @@
+version: 1
+title: "A股投资知识学习网站生成批次计划"
+source: "course-map.yaml"
+rules:
+  batch_size: "每批 5 到 10 章"
+  dependency_order: "低层知识先生成，高层知识后生成"
+  same_batch_principle: "同一批次内章节尽量依赖相同前置知识"
+  content_policy: "只用于正文生成调度，不包含课程正文"
+
+batches:
+  - batch_id: gen-batch-01
+    batch_title: "基础认知：网站规则、证券、股票与A股市场"
+    chapter_count: 5
+    chapters:
+      - id: c00-01
+        title: "如何使用本网站和术语体系"
+      - id: c01-01
+        title: "证券、股票与公司权益"
+      - id: c01-02
+        title: "A股市场与交易场所"
+      - id: c01-03
+        title: "跨市场名称与未来扩展边界"
+      - id: c01-04
+        title: "投资前的风险边界与学习目标"
+    prerequisites: []
+    new_terms:
+      - securities
+      - stock
+      - share
+      - listed-company
+      - shareholder
+      - equity
+      - market-cap
+      - total-share-capital
+      - free-float
+      - float-market-cap
+      - a-share
+      - shanghai-stock-exchange
+      - shenzhen-stock-exchange
+      - main-board
+      - beijing-stock-exchange
+      - neeq
+      - b-share
+      - hk-stock
+      - h-share
+      - us-stock
+      - hong-kong-stock-exchange
+      - nyse
+      - nasdaq
+      - stock-connect
+      - northbound-trading
+      - southbound-trading
+      - qfii
+      - rmb
+      - hkd
+      - usd
+      - market-risk
+      - risk-tolerance
+      - investment-horizon
+      - risk-management
+    available_components:
+      - Term
+      - BaseCallout
+      - BaseCompareMatrix
+      - InvestRiskNotice
+      - InvestScenarioTabs
+      - InvestSecurityCard
+      - LearnProgress
+      - LearnReflection
+      - VizChart
+      - VizProcessFlow
+    suitable_chart_types:
+      - "流程图：公司、股份、股东、股票关系"
+      - "对比矩阵：A股板块与跨市场边界"
+      - "基础图表：风险、期限与学习目标关系"
+
+  - batch_id: gen-batch-02
+    batch_title: "交易机制：账户、委托、规则、成本与仓位"
+    chapter_count: 8
+    chapters:
+      - id: c02-01
+        title: "证券账户、资金账户与适当性"
+      - id: c02-02
+        title: "交易日、交易时段与交易单位"
+      - id: c02-03
+        title: "委托、报价与撮合"
+      - id: c02-04
+        title: "涨跌幅、涨停跌停与停复牌"
+      - id: c02-05
+        title: "交易成本与滑点"
+      - id: c02-06
+        title: "发行、上市制度与特殊状态"
+      - id: c02-07
+        title: "分红、送配与回购"
+      - id: c02-08
+        title: "仓位、成本与盈亏"
+    prerequisites:
+      - gen-batch-01
+    new_terms:
+      - trading-account
+      - brokerage-account
+      - suitability
+      - operational-risk
+      - trading-day
+      - trading-session
+      - lot
+      - t-plus-one
+      - order
+      - tick-size
+      - market-order
+      - limit-order
+      - call-auction
+      - continuous-auction
+      - bid
+      - ask
+      - spread
+      - order-book
+      - price-limit
+      - limit-up
+      - limit-down
+      - suspension
+      - resumption
+      - commission
+      - stamp-duty
+      - transfer-fee
+      - slippage
+      - transaction-cost
+      - primary-market
+      - secondary-market
+      - information-disclosure
+      - ipo
+      - registration-system
+      - approval-system
+      - star-market
+      - chinext
+      - new-share-subscription
+      - block-trade
+      - lock-up-period
+      - delisting
+      - st-stock
+      - dividend
+      - dividend-yield
+      - bonus-share
+      - rights-issue
+      - share-repurchase
+      - position
+      - full-position
+      - empty-position
+      - light-position
+      - heavy-position
+      - cash-position
+      - cost-basis
+      - profit-loss
+      - last-price
+      - floating-profit-loss
+    available_components:
+      - Term
+      - BaseCallout
+      - BaseCompareMatrix
+      - InvestMetricBadge
+      - InvestPortfolio
+      - InvestRiskNotice
+      - LearnReflection
+      - VizFormula
+      - VizProcessFlow
+      - VizTimeline
+    suitable_chart_types:
+      - "时间轴：交易日、披露、上市生命周期"
+      - "流程图：委托撮合、发行上市流程"
+      - "公式：交易成本构成"
+      - "组合图：现金与持仓比例"
+
+  - batch_id: gen-batch-03
+    batch_title: "市场识读：行情、K线、技术指标、指数与ETF"
+    chapter_count: 9
+    chapters:
+      - id: c03-01
+        title: "价格、成交与波动"
+      - id: c03-02
+        title: "K线与趋势状态"
+      - id: c03-03
+        title: "均线、支撑压力与量价关系"
+      - id: c03-04
+        title: "常见技术指标边界"
+      - id: c04-01
+        title: "指数、成分股与基准"
+      - id: c04-02
+        title: "A股核心指数"
+      - id: c04-03
+        title: "基金、指数基金与ETF"
+      - id: c04-04
+        title: "ETF净值、溢价折价与跟踪误差"
+      - id: c04-05
+        title: "债券、REITs与加密资产的边界"
+    prerequisites:
+      - gen-batch-02
+    new_terms:
+      - open-price
+      - close-price
+      - high-price
+      - low-price
+      - volume
+      - turnover
+      - turnover-rate
+      - amplitude
+      - volume-ratio
+      - capital-flow
+      - main-funds
+      - level2
+      - volatility
+      - k-line
+      - trend
+      - uptrend
+      - downtrend
+      - sideways
+      - pullback
+      - rebound
+      - moving-average
+      - support
+      - resistance
+      - breakout
+      - gap
+      - volume-price-analysis
+      - macd
+      - rsi
+      - kdj
+      - bollinger-bands
+      - golden-cross
+      - death-cross
+      - divergence
+      - overbought
+      - oversold
+      - index
+      - stock-index
+      - index-constituent
+      - index-weight
+      - benchmark
+      - csi300
+      - csi500
+      - sse50
+      - chinext-index
+      - fund
+      - mutual-fund
+      - index-fund
+      - etf
+      - lof
+      - qdii
+      - fund-nav
+      - premium-discount
+      - tracking-error
+      - expense-ratio
+      - bond
+      - credit-risk
+      - reit
+      - crypto
+    available_components:
+      - Term
+      - BaseCompareMatrix
+      - BaseDataSource
+      - InvestRiskNotice
+      - InvestScenarioTabs
+      - VizChart
+      - VizECharts
+      - VizFormula
+    suitable_chart_types:
+      - "基础图表：价格、成交量、波动"
+      - "K线图：开高低收结构"
+      - "对比矩阵：技术指标、指数、基金产品"
+      - "公式：ETF溢价折价、跟踪误差"
+      - "边界图：相邻资产类别风险边界"
+
+  - batch_id: gen-batch-04
+    batch_title: "基本面基础：财报、财务指标、行业与公司治理"
+    chapter_count: 9
+    chapters:
+      - id: c05-01
+        title: "财报、年报、季报与披露节点"
+      - id: c05-02
+        title: "资产负债表与资产质量"
+      - id: c05-03
+        title: "利润表与盈利质量"
+      - id: c05-04
+        title: "现金流量表与自由现金流"
+      - id: c05-05
+        title: "每股收益、ROE与偿债周转指标"
+      - id: c06-01
+        title: "行业、板块、产业链与供需"
+      - id: c06-02
+        title: "竞争优势、护城河与蓝筹特征"
+      - id: c06-03
+        title: "概念股与主题投资"
+      - id: c06-04
+        title: "公司治理与违规风险"
+    prerequisites:
+      - gen-batch-03
+    new_terms:
+      - financial-report
+      - annual-report
+      - quarterly-report
+      - earnings-guidance
+      - earnings-preview
+      - audit-opinion
+      - balance-sheet
+      - goodwill
+      - income-statement
+      - revenue
+      - gross-profit
+      - gross-margin
+      - operating-profit
+      - net-profit
+      - net-profit-attributable
+      - impairment
+      - non-recurring-profit
+      - dividend-payout-ratio
+      - cash-flow-statement
+      - operating-cash-flow
+      - capex
+      - free-cash-flow
+      - eps
+      - roe
+      - roa
+      - debt-to-asset-ratio
+      - current-ratio
+      - quick-ratio
+      - inventory-turnover
+      - accounts-receivable-turnover
+      - sector
+      - industry
+      - industry-chain
+      - supply-demand
+      - market-share
+      - competitive-advantage
+      - moat
+      - blue-chip
+      - thematic-investing
+      - concept-stock
+      - corporate-governance
+      - related-party-transaction
+      - pledged-shares
+      - shareholder-reduction
+      - shareholder-increase
+      - insider-trading
+      - market-manipulation
+    available_components:
+      - Term
+      - BaseCompareMatrix
+      - BaseDataSource
+      - InvestFinancialReport
+      - InvestMetricBadge
+      - InvestRiskNotice
+      - LearnCaseStudy
+      - LearnReflection
+      - VizFormula
+      - VizProcessFlow
+      - VizTimeline
+    suitable_chart_types:
+      - "时间轴：财报披露节奏"
+      - "财报表格：资产负债表、利润表、现金流量表"
+      - "公式：EPS、ROE、自由现金流"
+      - "流程图：产业链上下游"
+      - "对比矩阵：公司风格、治理风险"
+
+  - batch_id: gen-batch-05
+    batch_title: "估值与周期：估值方法、宏观变量、牛熊周期与风格轮动"
+    chapter_count: 7
+    chapters:
+      - id: c07-01
+        title: "估值、成长价值风格与安全边际"
+      - id: c07-02
+        title: "PE、PB、PS、PCF与PEG"
+      - id: c07-03
+        title: "企业价值、DCF与绝对估值"
+      - id: c08-01
+        title: "宏观经济、增长、通胀与汇率"
+      - id: c08-02
+        title: "货币政策、财政政策、流动性与经济周期"
+      - id: c08-03
+        title: "牛市、熊市、牛熊周期与市场情绪"
+      - id: c08-04
+        title: "周期股、防御股、均值回归与轮动"
+    prerequisites:
+      - gen-batch-04
+    new_terms:
+      - valuation
+      - growth-stock
+      - value-stock
+      - intrinsic-value
+      - margin-of-safety
+      - ttm
+      - historical-percentile
+      - valuation-band
+      - pe
+      - pb
+      - relative-valuation
+      - ps
+      - pcf
+      - peg
+      - forward-pe
+      - ev
+      - ebit
+      - ebitda
+      - ev-ebitda
+      - risk-free-rate
+      - equity-risk-premium
+      - discount-rate
+      - dcf
+      - absolute-valuation
+      - macro-economy
+      - gdp
+      - cpi
+      - ppi
+      - interest-rate
+      - exchange-rate
+      - liquidity
+      - monetary-policy
+      - fiscal-policy
+      - business-cycle
+      - credit-cycle
+      - bull-market
+      - bear-market
+      - bull-bear-cycle
+      - market-sentiment
+      - panic-selling
+      - cyclical-stock
+      - defensive-stock
+      - cyclicality
+      - sector-rotation
+      - mean-reversion
+      - momentum
+      - rotation
+    available_components:
+      - Term
+      - BaseCompareMatrix
+      - BaseDataSource
+      - InvestRiskNotice
+      - VizChart
+      - VizFormula
+      - VizTimeline
+    suitable_chart_types:
+      - "公式：PE、PB、DCF、折现率"
+      - "基础图表：估值区间、历史分位、宏观指标"
+      - "时间轴：经济周期、牛熊周期"
+      - "流程图：DCF折现过程"
+      - "对比矩阵：成长/价值、周期/防御、轮动关系"
+
+  - batch_id: gen-batch-06
+    batch_title: "闭环能力：组合风控、行为偏差、决策系统与高级边界"
+    chapter_count: 9
+    chapters:
+      - id: c09-01
+        title: "回撤、波动、Alpha、Beta与夏普比率"
+      - id: c09-02
+        title: "分散投资、资产配置、再平衡与风险控制"
+      - id: c09-03
+        title: "行为金融与常见心理偏差"
+      - id: c10-01
+        title: "基本面分析、技术分析、策略与定投"
+      - id: c10-02
+        title: "信号、调仓、组合优化与事件驱动"
+      - id: c10-03
+        title: "A股独立研究与决策工作流"
+      - id: c11-01
+        title: "融资融券、杠杆与强制平仓"
+      - id: c11-02
+        title: "衍生品、期货、期权与对冲"
+      - id: c11-03
+        title: "量化、回测、因子与策略偏差"
+    prerequisites:
+      - gen-batch-05
+    new_terms:
+      - diversification
+      - correlation
+      - drawdown
+      - max-drawdown
+      - beta
+      - alpha
+      - sharpe-ratio
+      - excess-return
+      - risk-return
+      - stop-loss
+      - take-profit
+      - asset-allocation
+      - rebalancing
+      - concentration-risk
+      - liquidity-risk
+      - black-swan
+      - tail-risk
+      - herd-effect
+      - fomo
+      - loss-aversion
+      - anchoring-effect
+      - confirmation-bias
+      - overconfidence
+      - fundamental-analysis
+      - technical-analysis
+      - strategy
+      - dollar-cost-averaging
+      - signal
+      - rebalance-frequency
+      - portfolio-optimization
+      - risk-parity
+      - event-driven
+      - leverage
+      - margin-trading
+      - short-selling
+      - securities-lending
+      - margin
+      - liquidation
+      - derivative
+      - futures
+      - stock-index-futures
+      - options
+      - call-option
+      - put-option
+      - hedging
+      - backtest
+      - quantitative-investing
+      - factor
+      - factor-model
+      - overfitting
+      - look-ahead-bias
+      - survivorship-bias
+      - grid-trading
+      - pairs-trading
+      - arbitrage
+    available_components:
+      - Term
+      - BaseCompareMatrix
+      - InvestPortfolio
+      - InvestRiskNotice
+      - LearnCaseStudy
+      - LearnQuiz
+      - LearnReflection
+      - VizChart
+      - VizFormula
+      - VizProcessFlow
+    suitable_chart_types:
+      - "基础图表：净值曲线、回撤曲线"
+      - "公式：夏普比率、风险收益比"
+      - "组合图：资产配置、再平衡"
+      - "流程图：独立研究、策略执行、回测偏差检查"
+      - "对比矩阵：投资方法、杠杆工具、衍生品边界"

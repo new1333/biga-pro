@@ -1,0 +1,641 @@
+version: 1
+title: "A股投资知识学习网站章节规格索引"
+depends_on:
+  component_spec: "component-spec.md"
+  glossary: "glossary.yaml"
+  course_map: "course-map.yaml"
+
+source_of_truth:
+  chapter_order: "course-map.yaml modules[].chapters[]"
+  first_terms: "course-map.yaml modules[].chapters[].first_terms"
+  components: "course-map.yaml modules[].chapters[].components"
+  chart_slots: "course-map.yaml modules[].chapters[].chart_slots"
+  term_definitions: "glossary.yaml terms[]"
+
+global_chapter_contract:
+  no_course_body_in_planning_files: true
+  one_chapter_per_markdown_file: true
+  chapter_generation_requires:
+    - "读取 component-spec.md"
+    - "读取 glossary.yaml"
+    - "读取 course-map.yaml"
+    - "读取 chapter-spec-index.yaml"
+    - "只生成当前 chapter_id 对应的正文文件"
+  frontmatter_required:
+    - chapter_id
+    - title
+    - module_id
+    - batch
+    - difficulty
+    - first_terms
+    - prerequisite_chapters
+    - components_used
+    - chart_slots
+  term_rules:
+    first_appearance: "只解释当前章节 first_terms 中的术语。"
+    repeat_appearance: "已在前序章节解释过的术语，必须写成 <Term id=\"term-id\" />。"
+    forbidden: "不得在后续章节重复定义已解释术语；不得引入 glossary.yaml 之外的正式术语。"
+    alias_policy: "术语别名只能用于首次解释；后续应使用 <Term id=\"term-id\" /> 组件引用。"
+  component_rules:
+    term_component: "Term"
+    risk_component: "InvestRiskNotice"
+    chart_components: [VizChart, VizFormula, VizTimeline, VizProcessFlow, VizMermaid, VizECharts]
+    data_component: "BaseDataSource"
+    interaction_components: [LearnQuiz, LearnReflection, LearnCaseStudy, LearnProgress]
+  chart_rules:
+    default_max_charts_per_chapter: 1
+    use_only_declared_chart_slots: true
+    chart_required_only_when_chart_slots_not_empty: true
+    chart_caption_required: true
+    data_source_required_for_market_or_financial_data: true
+  assessment_rules:
+    beginner_chapter: "最多一个 LearnQuiz 或 LearnReflection。"
+    intermediate_chapter: "可包含一个 LearnQuiz 和一个 LearnReflection。"
+    advanced_chapter: "优先使用 LearnCaseStudy 或 LearnReflection，不做投资建议。"
+  scope_rules:
+    current_a_share_path: "正文只围绕A股完整闭环展开。"
+    bridge_only: "只解释边界和术语，不展开港股、美股、币圈等未来模块正文。"
+    advanced_boundary: "只说明工具边界、风险和适用前提，不鼓励新手使用高风险工具。"
+
+chapter_defaults:
+  generation_status: "planned"
+  output_format: "markdown"
+  route_base: "/course"
+  allowed_content_blocks:
+    - "chapter_goal"
+    - "prerequisite_check"
+    - "first_term_explanations"
+    - "structured_explanation"
+    - "component_examples"
+    - "risk_notice"
+    - "quiz_or_reflection"
+  forbidden_content_blocks:
+    - "unplanned_term_definition"
+    - "specific_buy_sell_recommendation"
+    - "unverified_market_data"
+    - "future_scope_deep_dive_in_current_path"
+
+chapters:
+  - id: c00-01
+    module_id: m00
+    batch: batch-00
+    path: "/course/00-start/how-to-use"
+    title: "如何使用本网站和术语体系"
+    scope: current_a_share_path
+    generator_mode: "site_contract"
+    prerequisite_chapters: []
+    term_source: "course-map.yaml#c00-01"
+    component_source: "course-map.yaml#c00-01"
+    chart_source: "course-map.yaml#c00-01"
+
+  - id: c01-01
+    module_id: m01
+    batch: batch-01
+    path: "/course/01-foundation/securities-stock-equity"
+    title: "证券、股票与公司权益"
+    scope: current_a_share_path
+    generator_mode: "concept_foundation"
+    prerequisite_chapters: [c00-01]
+    term_source: "course-map.yaml#c01-01"
+    component_source: "course-map.yaml#c01-01"
+    chart_source: "course-map.yaml#c01-01"
+
+  - id: c01-02
+    module_id: m01
+    batch: batch-01
+    path: "/course/01-foundation/a-share-market-structure"
+    title: "A股市场与交易场所"
+    scope: current_a_share_path
+    generator_mode: "market_structure"
+    prerequisite_chapters: [c01-01]
+    term_source: "course-map.yaml#c01-02"
+    component_source: "course-map.yaml#c01-02"
+    chart_source: "course-map.yaml#c01-02"
+
+  - id: c01-03
+    module_id: m01
+    batch: batch-01
+    path: "/course/01-foundation/cross-market-vocabulary"
+    title: "跨市场名称与未来扩展边界"
+    scope: bridge_only
+    generator_mode: "boundary_vocabulary"
+    prerequisite_chapters: [c01-02]
+    term_source: "course-map.yaml#c01-03"
+    component_source: "course-map.yaml#c01-03"
+    chart_source: "course-map.yaml#c01-03"
+
+  - id: c01-04
+    module_id: m01
+    batch: batch-01
+    path: "/course/01-foundation/risk-boundary"
+    title: "投资前的风险边界与学习目标"
+    scope: current_a_share_path
+    generator_mode: "risk_boundary"
+    prerequisite_chapters: [c01-03]
+    term_source: "course-map.yaml#c01-04"
+    component_source: "course-map.yaml#c01-04"
+    chart_source: "course-map.yaml#c01-04"
+
+  - id: c02-01
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/accounts-suitability"
+    title: "证券账户、资金账户与适当性"
+    scope: current_a_share_path
+    generator_mode: "trading_mechanics"
+    prerequisite_chapters: [c01-04]
+    term_source: "course-map.yaml#c02-01"
+    component_source: "course-map.yaml#c02-01"
+    chart_source: "course-map.yaml#c02-01"
+
+  - id: c02-02
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/calendar-session-lot"
+    title: "交易日、交易时段与交易单位"
+    scope: current_a_share_path
+    generator_mode: "trading_mechanics"
+    prerequisite_chapters: [c02-01]
+    term_source: "course-map.yaml#c02-02"
+    component_source: "course-map.yaml#c02-02"
+    chart_source: "course-map.yaml#c02-02"
+
+  - id: c02-03
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/orders-and-matching"
+    title: "委托、报价与撮合"
+    scope: current_a_share_path
+    generator_mode: "trading_mechanics"
+    prerequisite_chapters: [c02-02]
+    term_source: "course-map.yaml#c02-03"
+    component_source: "course-map.yaml#c02-03"
+    chart_source: "course-map.yaml#c02-03"
+
+  - id: c02-04
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/price-limits-trading-status"
+    title: "涨跌幅、涨停跌停与停复牌"
+    scope: current_a_share_path
+    generator_mode: "trading_mechanics"
+    prerequisite_chapters: [c02-03]
+    term_source: "course-map.yaml#c02-04"
+    component_source: "course-map.yaml#c02-04"
+    chart_source: "course-map.yaml#c02-04"
+
+  - id: c02-05
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/transaction-costs"
+    title: "交易成本与滑点"
+    scope: current_a_share_path
+    generator_mode: "formula_intro"
+    prerequisite_chapters: [c02-04]
+    term_source: "course-map.yaml#c02-05"
+    component_source: "course-map.yaml#c02-05"
+    chart_source: "course-map.yaml#c02-05"
+
+  - id: c02-06
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/issuance-listing-status"
+    title: "发行、上市制度与特殊状态"
+    scope: current_a_share_path
+    generator_mode: "market_lifecycle"
+    prerequisite_chapters: [c02-05]
+    term_source: "course-map.yaml#c02-06"
+    component_source: "course-map.yaml#c02-06"
+    chart_source: "course-map.yaml#c02-06"
+
+  - id: c02-07
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/corporate-actions"
+    title: "分红、送配与回购"
+    scope: current_a_share_path
+    generator_mode: "corporate_actions"
+    prerequisite_chapters: [c02-06]
+    term_source: "course-map.yaml#c02-07"
+    component_source: "course-map.yaml#c02-07"
+    chart_source: "course-map.yaml#c02-07"
+
+  - id: c02-08
+    module_id: m02
+    batch: batch-02
+    path: "/course/02-trading/position-cost-profit-loss"
+    title: "仓位、成本与盈亏"
+    scope: current_a_share_path
+    generator_mode: "portfolio_foundation"
+    prerequisite_chapters: [c02-07]
+    term_source: "course-map.yaml#c02-08"
+    component_source: "course-map.yaml#c02-08"
+    chart_source: "course-map.yaml#c02-08"
+
+  - id: c03-01
+    module_id: m03
+    batch: batch-03
+    path: "/course/03-market-data/price-volume-volatility"
+    title: "价格、成交与波动"
+    scope: current_a_share_path
+    generator_mode: "market_data"
+    prerequisite_chapters: [c02-08]
+    term_source: "course-map.yaml#c03-01"
+    component_source: "course-map.yaml#c03-01"
+    chart_source: "course-map.yaml#c03-01"
+
+  - id: c03-02
+    module_id: m03
+    batch: batch-03
+    path: "/course/03-market-data/kline-trend"
+    title: "K线与趋势状态"
+    scope: current_a_share_path
+    generator_mode: "chart_literacy"
+    prerequisite_chapters: [c03-01]
+    term_source: "course-map.yaml#c03-02"
+    component_source: "course-map.yaml#c03-02"
+    chart_source: "course-map.yaml#c03-02"
+
+  - id: c03-03
+    module_id: m03
+    batch: batch-03
+    path: "/course/03-market-data/ma-support-resistance-volume-price"
+    title: "均线、支撑压力与量价关系"
+    scope: current_a_share_path
+    generator_mode: "chart_literacy"
+    prerequisite_chapters: [c03-02]
+    term_source: "course-map.yaml#c03-03"
+    component_source: "course-map.yaml#c03-03"
+    chart_source: "course-map.yaml#c03-03"
+
+  - id: c03-04
+    module_id: m03
+    batch: batch-03
+    path: "/course/03-market-data/technical-indicators"
+    title: "常见技术指标边界"
+    scope: current_a_share_path
+    generator_mode: "technical_boundary"
+    prerequisite_chapters: [c03-03]
+    term_source: "course-map.yaml#c03-04"
+    component_source: "course-map.yaml#c03-04"
+    chart_source: "course-map.yaml#c03-04"
+
+  - id: c04-01
+    module_id: m04
+    batch: batch-04
+    path: "/course/04-index-etf/index-constituents-benchmark"
+    title: "指数、成分股与基准"
+    scope: current_a_share_path
+    generator_mode: "index_foundation"
+    prerequisite_chapters: [c03-04]
+    term_source: "course-map.yaml#c04-01"
+    component_source: "course-map.yaml#c04-01"
+    chart_source: "course-map.yaml#c04-01"
+
+  - id: c04-02
+    module_id: m04
+    batch: batch-04
+    path: "/course/04-index-etf/a-share-core-indexes"
+    title: "A股核心指数"
+    scope: current_a_share_path
+    generator_mode: "index_catalog"
+    prerequisite_chapters: [c04-01]
+    term_source: "course-map.yaml#c04-02"
+    component_source: "course-map.yaml#c04-02"
+    chart_source: "course-map.yaml#c04-02"
+
+  - id: c04-03
+    module_id: m04
+    batch: batch-04
+    path: "/course/04-index-etf/fund-index-fund-etf"
+    title: "基金、指数基金与ETF"
+    scope: current_a_share_path
+    generator_mode: "product_foundation"
+    prerequisite_chapters: [c04-02]
+    term_source: "course-map.yaml#c04-03"
+    component_source: "course-map.yaml#c04-03"
+    chart_source: "course-map.yaml#c04-03"
+
+  - id: c04-04
+    module_id: m04
+    batch: batch-04
+    path: "/course/04-index-etf/etf-nav-premium-tracking"
+    title: "ETF净值、溢价折价与跟踪误差"
+    scope: current_a_share_path
+    generator_mode: "formula_intro"
+    prerequisite_chapters: [c04-03]
+    term_source: "course-map.yaml#c04-04"
+    component_source: "course-map.yaml#c04-04"
+    chart_source: "course-map.yaml#c04-04"
+
+  - id: c04-05
+    module_id: m04
+    batch: batch-04
+    path: "/course/04-index-etf/adjacent-asset-boundaries"
+    title: "债券、REITs与加密资产的边界"
+    scope: bridge_only
+    generator_mode: "asset_boundary"
+    prerequisite_chapters: [c04-04]
+    term_source: "course-map.yaml#c04-05"
+    component_source: "course-map.yaml#c04-05"
+    chart_source: "course-map.yaml#c04-05"
+
+  - id: c05-01
+    module_id: m05
+    batch: batch-05
+    path: "/course/05-financial-reports/report-types-disclosure-calendar"
+    title: "财报、年报、季报与披露节点"
+    scope: current_a_share_path
+    generator_mode: "financial_statement_foundation"
+    prerequisite_chapters: [c04-05]
+    term_source: "course-map.yaml#c05-01"
+    component_source: "course-map.yaml#c05-01"
+    chart_source: "course-map.yaml#c05-01"
+
+  - id: c05-02
+    module_id: m05
+    batch: batch-05
+    path: "/course/05-financial-reports/balance-sheet"
+    title: "资产负债表与资产质量"
+    scope: current_a_share_path
+    generator_mode: "financial_statement"
+    prerequisite_chapters: [c05-01]
+    term_source: "course-map.yaml#c05-02"
+    component_source: "course-map.yaml#c05-02"
+    chart_source: "course-map.yaml#c05-02"
+
+  - id: c05-03
+    module_id: m05
+    batch: batch-05
+    path: "/course/05-financial-reports/income-statement-profit-quality"
+    title: "利润表与盈利质量"
+    scope: current_a_share_path
+    generator_mode: "financial_statement"
+    prerequisite_chapters: [c05-02]
+    term_source: "course-map.yaml#c05-03"
+    component_source: "course-map.yaml#c05-03"
+    chart_source: "course-map.yaml#c05-03"
+
+  - id: c05-04
+    module_id: m05
+    batch: batch-05
+    path: "/course/05-financial-reports/cash-flow-statement"
+    title: "现金流量表与自由现金流"
+    scope: current_a_share_path
+    generator_mode: "financial_statement"
+    prerequisite_chapters: [c05-03]
+    term_source: "course-map.yaml#c05-04"
+    component_source: "course-map.yaml#c05-04"
+    chart_source: "course-map.yaml#c05-04"
+
+  - id: c05-05
+    module_id: m05
+    batch: batch-05
+    path: "/course/05-financial-reports/key-financial-metrics"
+    title: "每股收益、ROE与偿债周转指标"
+    scope: current_a_share_path
+    generator_mode: "financial_metrics"
+    prerequisite_chapters: [c05-04]
+    term_source: "course-map.yaml#c05-05"
+    component_source: "course-map.yaml#c05-05"
+    chart_source: "course-map.yaml#c05-05"
+
+  - id: c06-01
+    module_id: m06
+    batch: batch-06
+    path: "/course/06-fundamentals/industry-sector-chain"
+    title: "行业、板块、产业链与供需"
+    scope: current_a_share_path
+    generator_mode: "fundamental_analysis"
+    prerequisite_chapters: [c05-05]
+    term_source: "course-map.yaml#c06-01"
+    component_source: "course-map.yaml#c06-01"
+    chart_source: "course-map.yaml#c06-01"
+
+  - id: c06-02
+    module_id: m06
+    batch: batch-06
+    path: "/course/06-fundamentals/competitive-advantage-blue-chip"
+    title: "竞争优势、护城河与蓝筹特征"
+    scope: current_a_share_path
+    generator_mode: "fundamental_analysis"
+    prerequisite_chapters: [c06-01]
+    term_source: "course-map.yaml#c06-02"
+    component_source: "course-map.yaml#c06-02"
+    chart_source: "course-map.yaml#c06-02"
+
+  - id: c06-03
+    module_id: m06
+    batch: batch-06
+    path: "/course/06-fundamentals/concepts-and-themes"
+    title: "概念股与主题投资"
+    scope: current_a_share_path
+    generator_mode: "risk_boundary"
+    prerequisite_chapters: [c06-02]
+    term_source: "course-map.yaml#c06-03"
+    component_source: "course-map.yaml#c06-03"
+    chart_source: "course-map.yaml#c06-03"
+
+  - id: c06-04
+    module_id: m06
+    batch: batch-06
+    path: "/course/06-fundamentals/corporate-governance-risk"
+    title: "公司治理与违规风险"
+    scope: current_a_share_path
+    generator_mode: "risk_boundary"
+    prerequisite_chapters: [c06-03]
+    term_source: "course-map.yaml#c06-04"
+    component_source: "course-map.yaml#c06-04"
+    chart_source: "course-map.yaml#c06-04"
+
+  - id: c07-01
+    module_id: m07
+    batch: batch-07
+    path: "/course/07-valuation/valuation-intrinsic-value-margin"
+    title: "估值、成长价值风格与安全边际"
+    scope: current_a_share_path
+    generator_mode: "valuation_foundation"
+    prerequisite_chapters: [c06-04]
+    term_source: "course-map.yaml#c07-01"
+    component_source: "course-map.yaml#c07-01"
+    chart_source: "course-map.yaml#c07-01"
+
+  - id: c07-02
+    module_id: m07
+    batch: batch-07
+    path: "/course/07-valuation/multiple-valuation"
+    title: "PE、PB、PS、PCF与PEG"
+    scope: current_a_share_path
+    generator_mode: "formula_intro"
+    prerequisite_chapters: [c07-01]
+    term_source: "course-map.yaml#c07-02"
+    component_source: "course-map.yaml#c07-02"
+    chart_source: "course-map.yaml#c07-02"
+
+  - id: c07-03
+    module_id: m07
+    batch: batch-07
+    path: "/course/07-valuation/enterprise-value-dcf"
+    title: "企业价值、DCF与绝对估值"
+    scope: current_a_share_path
+    generator_mode: "advanced_valuation"
+    prerequisite_chapters: [c07-02]
+    term_source: "course-map.yaml#c07-03"
+    component_source: "course-map.yaml#c07-03"
+    chart_source: "course-map.yaml#c07-03"
+
+  - id: c08-01
+    module_id: m08
+    batch: batch-08
+    path: "/course/08-macro/macro-growth-inflation-fx"
+    title: "宏观经济、增长、通胀与汇率"
+    scope: current_a_share_path
+    generator_mode: "macro_foundation"
+    prerequisite_chapters: [c07-03]
+    term_source: "course-map.yaml#c08-01"
+    component_source: "course-map.yaml#c08-01"
+    chart_source: "course-map.yaml#c08-01"
+
+  - id: c08-02
+    module_id: m08
+    batch: batch-08
+    path: "/course/08-macro/policy-liquidity-cycle"
+    title: "货币政策、财政政策、流动性与经济周期"
+    scope: current_a_share_path
+    generator_mode: "macro_cycle"
+    prerequisite_chapters: [c08-01]
+    term_source: "course-map.yaml#c08-02"
+    component_source: "course-map.yaml#c08-02"
+    chart_source: "course-map.yaml#c08-02"
+
+  - id: c08-03
+    module_id: m08
+    batch: batch-08
+    path: "/course/08-macro/bull-bear-sentiment"
+    title: "牛市、熊市、牛熊周期与市场情绪"
+    scope: current_a_share_path
+    generator_mode: "market_cycle"
+    prerequisite_chapters: [c08-02]
+    term_source: "course-map.yaml#c08-03"
+    component_source: "course-map.yaml#c08-03"
+    chart_source: "course-map.yaml#c08-03"
+
+  - id: c08-04
+    module_id: m08
+    batch: batch-08
+    path: "/course/08-macro/style-cycle-rotation"
+    title: "周期股、防御股、均值回归与轮动"
+    scope: current_a_share_path
+    generator_mode: "style_cycle"
+    prerequisite_chapters: [c08-03]
+    term_source: "course-map.yaml#c08-04"
+    component_source: "course-map.yaml#c08-04"
+    chart_source: "course-map.yaml#c08-04"
+
+  - id: c09-01
+    module_id: m09
+    batch: batch-09
+    path: "/course/09-portfolio/risk-return-metrics"
+    title: "回撤、波动、Alpha、Beta与夏普比率"
+    scope: current_a_share_path
+    generator_mode: "portfolio_metrics"
+    prerequisite_chapters: [c08-04]
+    term_source: "course-map.yaml#c09-01"
+    component_source: "course-map.yaml#c09-01"
+    chart_source: "course-map.yaml#c09-01"
+
+  - id: c09-02
+    module_id: m09
+    batch: batch-09
+    path: "/course/09-portfolio/allocation-risk-control"
+    title: "分散投资、资产配置、再平衡与风险控制"
+    scope: current_a_share_path
+    generator_mode: "portfolio_control"
+    prerequisite_chapters: [c09-01]
+    term_source: "course-map.yaml#c09-02"
+    component_source: "course-map.yaml#c09-02"
+    chart_source: "course-map.yaml#c09-02"
+
+  - id: c09-03
+    module_id: m09
+    batch: batch-09
+    path: "/course/09-portfolio/behavioral-biases"
+    title: "行为金融与常见心理偏差"
+    scope: current_a_share_path
+    generator_mode: "behavioral_risk"
+    prerequisite_chapters: [c09-02]
+    term_source: "course-map.yaml#c09-03"
+    component_source: "course-map.yaml#c09-03"
+    chart_source: "course-map.yaml#c09-03"
+
+  - id: c10-01
+    module_id: m10
+    batch: batch-10
+    path: "/course/10-decision/analysis-methods-strategy"
+    title: "基本面分析、技术分析、策略与定投"
+    scope: current_a_share_path
+    generator_mode: "decision_framework"
+    prerequisite_chapters: [c09-03]
+    term_source: "course-map.yaml#c10-01"
+    component_source: "course-map.yaml#c10-01"
+    chart_source: "course-map.yaml#c10-01"
+
+  - id: c10-02
+    module_id: m10
+    batch: batch-10
+    path: "/course/10-decision/signals-rebalance-optimization"
+    title: "信号、调仓、组合优化与事件驱动"
+    scope: current_a_share_path
+    generator_mode: "strategy_loop"
+    prerequisite_chapters: [c10-01]
+    term_source: "course-map.yaml#c10-02"
+    component_source: "course-map.yaml#c10-02"
+    chart_source: "course-map.yaml#c10-02"
+
+  - id: c10-03
+    module_id: m10
+    batch: batch-10
+    path: "/course/10-decision/independent-a-share-workflow"
+    title: "A股独立研究与决策工作流"
+    scope: current_a_share_path
+    generator_mode: "capstone_workflow"
+    prerequisite_chapters: [c10-02]
+    term_source: "course-map.yaml#c10-03"
+    component_source: "course-map.yaml#c10-03"
+    chart_source: "course-map.yaml#c10-03"
+
+  - id: c11-01
+    module_id: m11
+    batch: batch-11
+    path: "/course/11-advanced/leverage-margin-short-selling"
+    title: "融资融券、杠杆与强制平仓"
+    scope: advanced_boundary
+    generator_mode: "advanced_risk_boundary"
+    prerequisite_chapters: [c10-03]
+    term_source: "course-map.yaml#c11-01"
+    component_source: "course-map.yaml#c11-01"
+    chart_source: "course-map.yaml#c11-01"
+
+  - id: c11-02
+    module_id: m11
+    batch: batch-11
+    path: "/course/11-advanced/derivatives-futures-options-hedging"
+    title: "衍生品、期货、期权与对冲"
+    scope: advanced_boundary
+    generator_mode: "advanced_risk_boundary"
+    prerequisite_chapters: [c11-01]
+    term_source: "course-map.yaml#c11-02"
+    component_source: "course-map.yaml#c11-02"
+    chart_source: "course-map.yaml#c11-02"
+
+  - id: c11-03
+    module_id: m11
+    batch: batch-11
+    path: "/course/11-advanced/quant-backtest-factor-bias"
+    title: "量化、回测、因子与策略偏差"
+    scope: advanced_boundary
+    generator_mode: "advanced_quant_boundary"
+    prerequisite_chapters: [c11-02]
+    term_source: "course-map.yaml#c11-03"
+    component_source: "course-map.yaml#c11-03"
+    chart_source: "course-map.yaml#c11-03"
