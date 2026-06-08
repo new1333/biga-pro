@@ -1,0 +1,106 @@
+---
+chapter_id: c05-05
+title: "每股收益、ROE与偿债周转指标"
+module_id: m05
+batch: batch-05
+difficulty: intermediate
+first_terms: [eps, roe, roa, debt-to-asset-ratio, current-ratio, quick-ratio, inventory-turnover, accounts-receivable-turnover]
+prerequisite_chapters: [c05-04]
+components_used: [InvestTerm, InvestMetricBadge, VizFormula]
+chart_slots: [roe-formula]
+---
+
+## 本章目标
+
+掌握每股收益（EPS）、净资产收益率（ROE）、总资产收益率（ROA）、资产负债率、流动比率、速动比率、存货周转率和应收账款周转率等关键财务指标的计算逻辑和使用边界。
+
+## EPS：每一股赚了多少钱
+
+<InvestTerm id="eps" term="EPS" mode="tooltip" />
+
+**EPS**（每股收益，Earnings Per Share）是归属于普通股股东的 <InvestTerm id="net-profit" term="净利润" /> 分摊到每股后的金额。它是衡量单股盈利能力的最基础指标。
+
+> EPS = 归母净利润 ÷ 总股本
+
+<InvestMetricBadge
+  label="EPS 示例"
+  value="归母净利润 10.5 亿 ÷ 总股本 5 亿股 = 2.1 元/股"
+  tone="neutral"
+  trend="unknown"
+/>
+
+EPS 高说明每股的盈利能力强。但看 EPS 时要注意两点：一是公司可能通过 <InvestTerm id="share-repurchase" term="股份回购" /> 减少总股本（分母变小），EPS 自然变大——盈利本身没有增加；二是不同公司的 EPS 没法直接比较，因为股价不同。
+
+## ROE 与 ROA：衡量赚钱效率
+
+<InvestTerm id="roe" term="ROE" mode="tooltip" />
+
+**ROE**（净资产收益率，Return on Equity）是衡量公司利用股东权益创造利润能力的指标。它是投资者最常关注的综合性盈利能力指标。
+
+<VizFormula
+  formula="ROE = 净利润 ÷ 平均净资产 × 100%"
+  caption="ROE 的基本计算公式"
+  :variables="[
+    { symbol: '净利润', label: '通常使用归母净利润' },
+    { symbol: '平均净资产', label: '期初和期末净资产的平均值，即所有者权益' }
+  ]"
+/>
+
+ROE 15% 大致可以理解为：股东每投入 100 元，公司一年能给股东创造约 15 元的净利润。长期来看，一家公司的 ROE 水平和它的股价走势有较强的正向关系。
+
+<BaseCallout type="tip" title="ROE 的拆解分析">
+ROE 可以通过"杜邦分析"拆解为三个驱动因素：净利润率（赚钱效率）× 总资产周转率（运营效率）× 权益乘数（杠杆水平）。同样的 ROE，由高利润率驱动和由高杠杆驱动的含义完全不同。这部分属于进阶内容，后续估值模块会进一步展开。
+</BaseCallout>
+
+<InvestTerm id="roa" term="ROA" mode="tooltip" />
+
+**ROA**（总资产收益率）是衡量公司利用全部资产创造利润能力的指标。ROA = 净利润 ÷ 平均总资产。ROA 和 ROE 的差别在于分母——ROE 分母是净资产（股东出钱的部分），ROA 分母是总资产（股东出钱 + 借来的钱）。如果 ROE 很高但 ROA 很低，说明公司的盈利能力严重依赖杠杆。
+
+<InvestMetricBadge
+  label="ROE vs ROA"
+  value="ROE 15% / ROA 5% → 盈利能力较大程度依赖杠杆"
+  tone="warning"
+  trend="unknown"
+/>
+
+## 偿债能力指标
+
+<InvestTerm id="debt-to-asset-ratio" term="资产负债率" mode="tooltip" />
+
+**资产负债率**（也叫负债率）= 总负债 ÷ 总资产。它反映了公司资产中有多少是通过借钱获得的。资产负债率越高，公司越依赖外部融资，在利率上升或信贷收紧时压力越大。但正如前面所说，不同行业的"正常"负债率差异巨大，必须同行比较。
+
+<InvestTerm id="current-ratio" term="流动比率" mode="tooltip" />
+
+**流动比率** = 流动资产 ÷ 流动负债。它衡量公司用流动资产偿还短期负债的能力。流动比率大于 1 说明公司理论上能用流动资产覆盖所有短期债务，低于 1 则需要关注短期偿债压力。
+
+<InvestTerm id="quick-ratio" term="速动比率" mode="tooltip" />
+
+**速动比率** = （流动资产 - 存货）÷ 流动负债。它比流动比率更严格——把"不好变现"的存货去掉了。如果一家公司的流动比率还可以但速动比率很低，说明它的流动资产"含存率"太高，变现能力不如报表数字看起来那么好。
+
+## 运营效率指标
+
+<InvestTerm id="inventory-turnover" term="存货周转率" mode="tooltip" />
+
+**存货周转率**衡量存货转换为销售收入或销售成本的效率。存货周转率越高，说明产品卖得快、库存积压少；周转率突然大幅下降，可能是产品滞销的信号。
+
+<InvestTerm id="accounts-receivable-turnover" term="应收账款周转率" mode="tooltip" />
+
+**应收账款周转率**衡量公司回收应收账款（客户欠的钱）的效率。周转率越低，说明客户赊账时间越长、回款越慢。如果应收账款增速持续超过营业收入增速，这可能是一个危险信号——公司为了"做"收入在放松信用政策，导致大量资金被积压在客户手里。
+
+## 常见误区
+
+1. **"EPS 越高越好"**：EPS 高了当然好，但要结合股价来看——这就是市盈率（PE）的逻辑。一只 EPS 2 元、股价 10 元的股票和一只 EPS 20 元、股价 1000 元的股票，只看 EPS 无法判断哪个更值得投资。
+
+2. **"ROE 高就是最佳投资标的"**：高 ROE 可能来自高净利润率（核心竞争力）、也可能来自高杠杆（借了很多钱）。后者在顺周期时放大了收益，但在逆周期时可能加速亏损。
+
+3. **"存货周转率下降一定不好"**：在行业需求旺季之前，公司主动增加备货也会导致存货周转率暂时下降。指标的短期波动需要结合经营背景来解读，不要机械判断。
+
+## 本章总结
+
+- **EPS** 衡量每股盈利能力，结合股价才形成估值的起点（PE）
+- **ROE** 是综合性最强的盈利指标，需要关注其驱动因素的构成
+- **ROA** 反映总资产的利用效率，与 ROE 对比可以看出杠杆的影响
+- **资产负债率 / 流动比率 / 速动比率** 分别衡量长期和短期偿债能力
+- **存货周转率 / 应收账款周转率** 反映运营效率，需关注趋势变化
+
+五章的学习让你掌握了阅读和理解上市公司财报的基础能力。我们从下一章开始将视角从"看报表"扩展到"看行业和公司"——公司所处的行业位置、竞争优势和治理质量。

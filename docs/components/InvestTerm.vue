@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { getGlossaryTerm } from '../.vitepress/theme/term-glossary'
 
 /**
@@ -24,6 +24,7 @@ type DataSource = {
 
 type TermMode = 'tooltip' | 'inline' | 'card' | 'link'
 type TermLevel = 'beginner' | 'intermediate' | 'advanced'
+type TooltipPlacement = 'above' | 'below'
 
 const props = withDefaults(
   defineProps<{
@@ -67,6 +68,23 @@ const resolvedAliases = computed(() => {
 
 const resolvedLevel = computed<TermLevel>(() => props.level || glossaryTerm.value?.difficulty || 'beginner')
 
+const triggerRef = ref<HTMLElement | null>(null)
+const bubbleRef = ref<HTMLElement | null>(null)
+const isTooltipVisible = ref(false)
+const isTooltipReady = ref(false)
+const tooltipPlacement = ref<TooltipPlacement>('above')
+const tooltipStyle = ref({
+  top: '-9999px',
+  left: '0px'
+})
+
+const TOOLTIP_GAP = 10
+const VIEWPORT_MARGIN = 12
+const MAX_TOOLTIP_Z_INDEX = '2147483647'
+
+let rafId = 0
+let hasViewportListeners = false
+
 const tooltipId = computed(() => {
   const raw = props.id || resolvedTerm.value
   const normalized = raw.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '')
@@ -79,18 +97,132 @@ const sourceText = computed(() => {
     .filter(Boolean)
     .join(' · ')
 })
+
+function updateTooltipPosition() {
+  if (typeof window === 'undefined' || !triggerRef.value || !bubbleRef.value) return
+
+  const triggerRect = triggerRef.value.getBoundingClientRect()
+  const bubbleRect = bubbleRef.value.getBoundingClientRect()
+  const bubbleWidth = bubbleRect.width
+  const bubbleHeight = bubbleRect.height
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+
+  const centeredLeft = triggerRect.left + (triggerRect.width / 2) - (bubbleWidth / 2)
+  const maxLeft = Math.max(VIEWPORT_MARGIN, viewportWidth - bubbleWidth - VIEWPORT_MARGIN)
+  const left = Math.min(Math.max(centeredLeft, VIEWPORT_MARGIN), maxLeft)
+
+  const topAbove = triggerRect.top - bubbleHeight - TOOLTIP_GAP
+  const topBelow = triggerRect.bottom + TOOLTIP_GAP
+  const canPlaceAbove = topAbove >= VIEWPORT_MARGIN
+  const maxTop = Math.max(VIEWPORT_MARGIN, viewportHeight - bubbleHeight - VIEWPORT_MARGIN)
+
+  tooltipPlacement.value = canPlaceAbove ? 'above' : 'below'
+  tooltipStyle.value = {
+    top: `${Math.min(Math.max(canPlaceAbove ? topAbove : topBelow, VIEWPORT_MARGIN), maxTop)}px`,
+    left: `${left}px`
+  }
+  isTooltipReady.value = true
+}
+
+function scheduleTooltipPosition() {
+  if (typeof window === 'undefined') return
+  if (rafId) window.cancelAnimationFrame(rafId)
+  rafId = window.requestAnimationFrame(() => {
+    rafId = 0
+    updateTooltipPosition()
+  })
+}
+
+function addViewportListeners() {
+  if (typeof window === 'undefined' || hasViewportListeners) return
+  window.addEventListener('resize', scheduleTooltipPosition)
+  window.addEventListener('scroll', scheduleTooltipPosition, true)
+  hasViewportListeners = true
+}
+
+function removeViewportListeners() {
+  if (typeof window === 'undefined' || !hasViewportListeners) return
+  window.removeEventListener('resize', scheduleTooltipPosition)
+  window.removeEventListener('scroll', scheduleTooltipPosition, true)
+  hasViewportListeners = false
+}
+
+function showTooltip() {
+  if (isTooltipVisible.value) {
+    scheduleTooltipPosition()
+    return
+  }
+
+  isTooltipReady.value = false
+  isTooltipVisible.value = true
+}
+
+function hideTooltip() {
+  isTooltipVisible.value = false
+  isTooltipReady.value = false
+}
+
+watch(isTooltipVisible, async (visible) => {
+  if (!visible) {
+    removeViewportListeners()
+    if (typeof window !== 'undefined' && rafId) {
+      window.cancelAnimationFrame(rafId)
+      rafId = 0
+    }
+    return
+  }
+
+  addViewportListeners()
+  await nextTick()
+  updateTooltipPosition()
+})
+
+onBeforeUnmount(() => {
+  removeViewportListeners()
+  if (typeof window !== 'undefined' && rafId) {
+    window.cancelAnimationFrame(rafId)
+  }
+})
 </script>
 
 <template>
   <span v-if="mode === 'tooltip'" class="invest-term">
-    <span class="invest-term__trigger" tabindex="0" :aria-describedby="tooltipId">
+    <span
+      ref="triggerRef"
+      class="invest-term__trigger"
+      tabindex="0"
+      :aria-describedby="tooltipId"
+      :aria-expanded="isTooltipVisible"
+      @mouseenter="showTooltip"
+      @mouseleave="hideTooltip"
+      @focus="showTooltip"
+      @blur="hideTooltip"
+    >
       <slot>{{ resolvedTerm }}</slot>
     </span>
-    <span :id="tooltipId" class="invest-term__bubble" role="tooltip">
-      <strong>{{ resolvedTerm }}</strong>
-      <span v-if="resolvedDefinition">{{ resolvedDefinition }}</span>
-      <span v-if="resolvedAliases.length" class="invest-term__muted">别名：{{ resolvedAliases.join('、') }}</span>
-    </span>
+    <Teleport to="body">
+      <span
+        v-show="isTooltipVisible"
+        :id="tooltipId"
+        ref="bubbleRef"
+        class="invest-term__bubble"
+        :class="{
+          'invest-term__bubble--visible': isTooltipVisible && isTooltipReady,
+          'invest-term__bubble--below': tooltipPlacement === 'below'
+        }"
+        :style="{
+          ...tooltipStyle,
+          zIndex: MAX_TOOLTIP_Z_INDEX,
+          visibility: isTooltipReady ? 'visible' : 'hidden'
+        }"
+        role="tooltip"
+      >
+        <strong>{{ resolvedTerm }}</strong>
+        <span v-if="resolvedDefinition">{{ resolvedDefinition }}</span>
+        <span v-if="resolvedAliases.length" class="invest-term__muted">别名：{{ resolvedAliases.join('、') }}</span>
+      </span>
+    </Teleport>
   </span>
 
   <span v-else-if="mode === 'inline'" class="invest-term-inline">
@@ -135,12 +267,9 @@ const sourceText = computed(() => {
 }
 
 .invest-term__bubble {
-  position: absolute;
-  z-index: 20;
-  bottom: calc(100% + 10px);
-  left: 50%;
+  position: fixed;
   display: grid;
-  width: min(320px, 80vw);
+  width: min(320px, calc(100vw - 24px));
   gap: 6px;
   padding: 12px;
   border: 1px solid var(--vp-c-divider);
@@ -152,14 +281,21 @@ const sourceText = computed(() => {
   line-height: 1.6;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, 4px);
+  transform: translateY(4px);
   transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
-.invest-term:hover .invest-term__bubble,
-.invest-term:focus-within .invest-term__bubble {
+.invest-term__bubble--visible {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
+}
+
+.invest-term__bubble--below {
+  transform: translateY(-4px);
+}
+
+.invest-term__bubble--visible.invest-term__bubble--below {
+  transform: translateY(0);
 }
 
 .invest-term__muted,

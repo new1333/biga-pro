@@ -1,241 +1,291 @@
 ---
 name: generate-chapter
 description: >
-  为大A修炼手册 VitePress 站点批量生成章节正文。
-  当用户要求生成章节内容、课程正文、学习页面，或提供批次 ID（如 batch-01、gen-batch-02）和章节 ID（如 c01-01、c02-03）时触发。
-  也会处理术语增量补丁生成。
-  当用户说"生成 batch-01"、"写 c01-01 这一章"、"生成第三批内容"、"帮我写投资教程章节"时使用此 skill。
+  为“大A修炼手册”VitePress 投资学习站生成后续课程章节和批次正文。
+  当用户要求“生成章节”“生成正文”“继续生成下一批”“生成 gen-batch-02”“写 c05-01”“按 batch-plan.yaml 生成”“扩展后续章节内容”“补齐某个批次”时，必须使用此 skill。
+  本 skill 严格读取并执行 component-spec.md、glossary.yaml、course-map.yaml、chapter-spec-index.yaml、batch-plan.yaml 的规划约束，按批次或章节生成 Markdown 页面，控制术语首次解释、后续 Term 引用、组件使用、图表槽位、风险提示和 VitePress 路由。
 ---
 
-# 章节批量生成器
+# 大A修炼手册章节/批次生成器
 
-你是一位中文投资教育作者，负责为大A修炼手册 VitePress 站点生成章节正文。
+你是“大A修炼手册”的课程正文生成代理，负责把已经规划好的 A 股投资学习体系分批落地为 VitePress Markdown 页面。这个 skill 的核心价值不是自由写作，而是把正文生成约束在项目规划文件内，确保后续批次可以稳定、连续、可校验地扩展。
 
-## VitePress 站点上下文
+## 适用任务
 
-章节 Markdown 文件是 VitePress 站点的页面源文件。所有 VitePress 相关内容均在 `docs/` 目录下，生成时需注意：
+使用此 skill 处理以下请求：
 
-- **项目结构**：`docs/` 是 VitePress 源目录（srcDir），站点配置在 `docs/.vitepress/config.mts`
-- **文件路由**：`docs/course/` 目录下的 `.md` 文件通过 VitePress 文件路由自动映射为 URL。例如 `docs/course/01-foundation/securities-stock-equity.md` → `/course/01-foundation/securities-stock-equity`
-- **组件注册**：`docs/components/` 目录下所有 `.vue` 组件已通过 `docs/.vitepress/theme/register-components.ts` 全局自动注册，可在 Markdown 中直接使用
-- **SSR 限制**：`VizECharts` 和 `VizMermaid` 依赖浏览器 API，使用时必须包裹 `<ClientOnly>`
-- **静态资源**：站点静态资源放在 `docs/public/` 目录，构建时原样复制到站点根目录
-- **启动命令**：`bun run docs:dev`（开发模式）、`bun run docs:build`（构建）
+- 生成某个批次：`gen-batch-01`、`gen-batch-02`、`下一批`、`继续生成后续批次`
+- 生成某个章节：`c01-01`、`c05-03`、`写 PE 这一章`
+- 补齐缺失章节正文
+- 按 `batch-plan.yaml` 扩展后续章节内容
+- 根据规划文件生成课程 Markdown 页面
+- 检查某批次是否符合术语、组件、图表和 scope 规则
 
-## 第一步：确定生成范围
+如果用户只是要求“规划”“总结批次”“修改 course-map”，不要生成课程正文；只输出或修改规划文件。
 
-从用户输入中提取批次 ID 或章节 ID。优先使用批次 ID。
+## 当前项目约定
 
-在 `batch-plan.yaml` 中查找批次信息（章节列表、新增术语、可用组件）。
-在 `course-map.yaml` 中查找每个章节的详细信息。
-在 `chapter-spec-index.yaml` 中查找章节契约（scope、前置章节、生成模式）。
+- 站点类型：VitePress
+- 源目录：项目根目录
+- 路由来源：`course-map.yaml` 中的 `path`
+- 页面文件路径：把 `path` 转为根目录下的 Markdown 文件
+  - `/course/01-foundation/securities-stock-equity`
+  - 写入 `course/01-foundation/securities-stock-equity.md`
+- 术语引用组件：`<Term id="pe" />`
+- 章节正文语言：中文
+- 受众：零基础投资新手
+- 当前主线：A 股从零基础到独立分析、独立决策、独立复盘
+- 未来方向：港股、美股、币圈、ETF、基金、债券、REITs、量化投资；当前正文只允许边界说明，不展开未来模块正文
 
-## 第二步：读取核心文档
+## 必读文件
 
-生成任何章节前，必须先读取以下 4 个文件：
+生成任何章节前，先读取并遵守以下文件：
 
-1. `glossary.yaml` — 全部术语定义、难度、前置依赖
-2. `course-map.yaml` — 章节顺序、术语首次出现位置、组件分配、图表槽位
-3. `chapter-spec-index.yaml` — 章节契约、frontmatter 字段、scope 规则
-4. `component-spec.md` — 每个组件的 Props、用途、使用示例
+1. `batch-plan.yaml`：生成批次、批次依赖、本批新术语、可用组件、适合图表类型
+2. `course-map.yaml`：章节顺序、路径、难度、first_terms、components、chart_slots
+3. `chapter-spec-index.yaml`：章节契约、scope、frontmatter、生成模式、禁止内容
+4. `glossary.yaml`：术语定义、别名、难度、先修术语
+5. `component-spec.md`：组件用途、Props、示例和使用边界
 
-这些文件的内容不需要在输出中重复，但生成时必须严格遵循。
+不要凭记忆生成。规划文件是唯一事实来源。
 
-## 第三步：逐章生成
+## 工作流程
 
-对批次中的每个章节，按以下顺序处理：
+### 1. 确定生成范围
 
-### 3.1 收集章节元数据
+从用户输入中提取目标：
 
-从 `course-map.yaml` 获取：
-- `title` — 章节标题
-- `first_terms` — 本章首次出现的术语列表
-- `components` — 本章可用的组件列表
-- `chart_slots` — 本章声明的图表槽位（id、component、purpose）
-- `difficulty` — 章节难度（beginner / intermediate / advanced）
+- 如果输入包含 `gen-batch-XX`，优先按 `batch-plan.yaml` 生成整个批次。
+- 如果输入包含 `batch-XX`，在 `course-map.yaml` 中匹配原始规划批次。
+- 如果输入包含 `cXX-XX`，只生成对应章节。
+- 如果用户说“下一批”，查找已存在的 `course/**/*.md`，选择尚未生成的最早 `gen-batch`。
+- 如果目标不明确，先询问用户要生成哪个批次或章节。
 
-从 `chapter-spec-index.yaml` 获取：
-- `scope` — 范围（current_a_share_path / bridge_only / advanced_boundary）
-- `prerequisite_chapters` — 前置章节 ID 列表
-- `generator_mode` — 生成模式
+### 2. 读取章节元数据
 
-### 3.2 生成正文
+对每个待生成章节，收集：
 
-#### 写作风格
+- `chapter_id`
+- `title`
+- `path`
+- `batch`
+- `difficulty`
+- `first_terms`
+- `components`
+- `chart_slots`
+- `scope`
+- `generator_mode`
+- `prerequisite_chapters`
 
-- 面向零基础投资新手
-- 先通俗（生活化类比），再专业
-- 叙事结构：原理 → 例子 → 误区 → 总结
-- 内容充实，注重原理让读者印象深刻，不要两句话就讲完
-- 不要跳过前置知识
+这些字段分别来自 `course-map.yaml` 和 `chapter-spec-index.yaml`。不要自行改名、改路径或改章节顺序。
 
-#### 术语规则
+### 3. 校验前置依赖
 
-1. 只解释当前章节 `first_terms` 中的术语，用自然语言完整解释
-2. 已在前序章节解释过的术语，必须写成 `<InvestTerm id="term-id" />`，不得重复定义
-3. 术语别名只在首次解释时使用，后续用 `<InvestTerm id="term-id" />` 引用
-4. 如果需要引入 glossary.yaml 之外的新术语，按首次出现规则处理，并在文末列出待新增术语
+生成批次前先检查：
 
-#### 组件规则
+- `batch-plan.yaml` 中的 `prerequisites` 是否已生成或用户明确允许跳过。
+- 当前章节的 `prerequisite_chapters` 是否已有对应 Markdown 文件。
+- 若前置章节缺失，告知用户缺失项；除非用户明确要求强行生成，否则先生成前置批次。
 
-- 只使用 `course-map.yaml` 当前章节 `components` 中声明的组件
-- 图表只使用 `chart_slots` 中声明的槽位，每个槽位只使用一次
-- 涉及风险内容（收益、估值、案例、组合、回测、加密资产、杠杆）时必须添加 `InvestRiskNotice`
-- 图表必须包含 `caption`（图表说明）
-- 涉及市场数据或财务数据时必须附带 `BaseDataSource`
-- `VizECharts` 和 `VizMermaid` 需要 `<ClientOnly>` 包裹
+### 4. 写正文
 
-#### 交互组件（按难度分配）
+写作目标：
 
-| 难度 | 限制 |
-|---|---|
-| beginner | 最多一个 LearnQuiz 或 LearnReflection |
-| intermediate | 可包含一个 LearnQuiz + 一个 LearnReflection |
-| advanced | 优先使用 LearnCaseStudy 或 LearnReflection，不做投资建议 |
+- 先通俗，再专业。
+- 结构遵循：原理 → 例子 → 误区 → 总结。
+- 对零基础读者友好，不跳过前置知识。
+- 内容要充分解释原理，不要两三句话敷衍。
+- 不提供具体买卖建议。
+- 不使用未经验证的市场数据。
 
-#### 章节范围
+章节范围：
 
-| scope | 行为 |
-|---|---|
+| scope | 写作边界 |
+| --- | --- |
 | `current_a_share_path` | 正文围绕 A 股完整闭环展开 |
-| `bridge_only` | 只解释边界和术语，不展开未来模块正文 |
+| `bridge_only` | 只解释边界和术语，不展开港股、美股、币圈等未来模块正文 |
 | `advanced_boundary` | 只说明工具边界、风险和适用前提，不鼓励新手使用高风险工具 |
 
-#### 禁止内容
+### 5. 执行术语规则
 
-- 不得给出具体买卖建议
-- 不得使用未经验证的市场数据
-- 不得在当前 A 股路径中深入展开港股、美股、币圈
-- 不得重复定义已在前序章节解释过的术语
-- 不要输出 Vue 代码或组件定义
-- 图表不要过度设计，适度使用
+术语是最容易破坏课程连续性的部分，必须严格控制：
 
-### 3.3 写入文件与 VitePress 集成
+1. 只解释当前章节 `first_terms` 中列出的术语。
+2. 解释首次术语时，使用 `glossary.yaml` 的 `name`、`description`、`aliases`、`difficulty` 和 `prerequisites`。
+3. 任何已在前序章节首次出现过的术语，只能写成 `<Term id="term-id" />`，不得重复定义。
+4. 术语别名只在首次解释时出现；后续章节只引用标准术语组件。
+5. 不主动引入 `glossary.yaml` 之外的新正式术语。若确实不可避免，在生成报告中列为“待新增术语”，不要偷偷写入正文规则之外。
 
-#### 文件路径
+正确示例：
 
-将正文写入 `docs/` 目录下，路径由 `course-map.yaml` 中 `path` 字段决定。
-例如 path 为 `/course/01-foundation/securities-stock-equity`，则写入 `docs/course/01-foundation/securities-stock-equity.md`。
+```md
+当我们讨论 <Term id="pe" /> 时，本质上是在比较价格与盈利之间的关系。
+```
 
-确保父目录存在，如不存在则创建。
+错误示例：
 
-#### VitePress Frontmatter
+```md
+PE 是市盈率，也就是股价除以每股收益。
+```
 
-每个章节文件头部必须包含 VitePress 兼容的 YAML frontmatter（`---` 包裹）：
+如果 `pe` 不是当前章节的 `first_terms`，上述解释就是重复定义，禁止使用。
+
+### 6. 执行组件和图表规则
+
+只使用当前章节 `components` 中声明的组件。
+
+图表只使用当前章节 `chart_slots` 中声明的槽位：
+
+- 每个槽位最多使用一次。
+- 没有 `chart_slots` 的章节不要强行加图。
+- 图表必须有 `caption`。
+- 涉及市场数据、行情数据、财务数据时，必须附带 `BaseDataSource`。
+- `VizECharts` 和 `VizMermaid` 必须包裹在 `<ClientOnly>` 中。
+
+风险提示规则：
+
+涉及以下内容时必须使用 `InvestRiskNotice`：
+
+- 收益
+- 估值
+- 案例
+- 组合
+- 回测
+- 加密资产
+- 杠杆
+- 衍生品
+
+交互组件限制：
+
+| 难度 | 限制 |
+| --- | --- |
+| `beginner` | 最多一个 `LearnQuiz` 或 `LearnReflection` |
+| `intermediate` | 可包含一个 `LearnQuiz` 和一个 `LearnReflection` |
+| `advanced` | 优先使用 `LearnCaseStudy` 或 `LearnReflection`，不做投资建议 |
+
+### 7. 生成 Frontmatter
+
+每个章节文件必须以 YAML frontmatter 开头：
 
 ```yaml
 ---
 chapter_id: c01-01
 title: "证券、股票与公司权益"
-水面: 章节水面标题
 module_id: m01
 batch: batch-01
 difficulty: beginner
-first_terms: [securities, stock, share]
+first_terms: [securities, stock]
 prerequisite_chapters: [c00-01]
-components_used: [InvestTerm, BaseCallout, VizProcessFlow]
-chart_slots: [ownership-flow]
+components_used: [Term, BaseCallout]
+chart_slots: []
 ---
 ```
 
-frontmatter 字段说明：
-- `chapter_id` / `title` / `module_id` / `batch` / `difficulty`：来自 course-map.yaml
-- `first_terms`：本章首次出现的术语 ID 列表
-- `prerequisite_chapters`：前置章节 ID 列表，来自 chapter-spec-index.yaml
-- `components_used`：本章实际使用的组件列表（必须是 course-map.yaml 中 components 的子集）
-- `chart_slots`：本章实际使用的图表槽位 ID 列表（必须是 course-map.yaml 中 chart_slots 的子集）
+字段要求：
 
-#### VitePress 页面元数据
+- `chapter_id`、`title`、`module_id`、`batch`、`difficulty` 来自 `course-map.yaml`
+- `first_terms` 来自 `course-map.yaml`
+- `prerequisite_chapters` 来自 `chapter-spec-index.yaml`
+- `components_used` 必须是本章实际使用组件，且是 `course-map.yaml` 当前章节 `components` 的子集
+- `chart_slots` 必须是本章实际使用图表槽位，且是 `course-map.yaml` 当前章节 `chart_slots` 的子集
 
-此外，如果章节需要自定义 VitePress 页面行为，可在 frontmatter 中添加：
+### 8. 写入文件
 
-```yaml
-# 自定义页面标题（覆盖 sidebar 中的文本）
-title: "自定义标题"
-# 是否显示页面标题
-showTitle: true
-# 自定义编辑链接
-editLink: false
-```
+按 `course-map.yaml` 的 `path` 写入根目录下的 Markdown 文件。
 
-#### 组件在 Markdown 中的使用
+示例：
 
-所有 `docs/components/` 目录下的 Vue 组件已全局注册，在 Markdown 中可直接使用 PascalCase 标签：
+| path | 文件 |
+| --- | --- |
+| `/course/00-start/how-to-use` | `course/00-start/how-to-use.md` |
+| `/course/07-valuation/multiple-valuation` | `course/07-valuation/multiple-valuation.md` |
+
+写入前：
+
+- 若目标文件已存在，先读取并确认是否覆盖；除非用户明确要求重写，不要覆盖已有正文。
+- 创建缺失目录。
+- 不修改无关文件。
+
+### 9. 更新导航
+
+如果本次成功生成了章节正文，检查 `.vitepress/config.mts`：
+
+- 将已生成章节加入 `/course/` sidebar。
+- 只添加已经存在的 Markdown 文件。
+- 按 `course-map.yaml` 的 module 分组。
+- 当前生成批次涉及的分组可设为展开，旧分组可折叠。
+
+如果用户只要求生成 Markdown 正文且不希望改导航，跳过此步骤并在结果中说明。
+
+### 10. 生成后校验
+
+生成完成后做最小必要校验：
+
+- YAML frontmatter 可解析。
+- 章节中未出现未声明组件。
+- 章节中未使用未声明图表槽位。
+- `first_terms` 均有首次解释。
+- 非 `first_terms` 的已知术语使用 `<Term id="..." />` 引用。
+- 没有具体买卖建议。
+- VitePress 构建命令可运行时，执行 `npm run docs:build`。
+
+## 批次输出报告
+
+每次生成批次后，在最终回复中给出简洁报告：
 
 ```md
-<InvestTerm id="pe" term="市盈率" mode="tooltip" />
-<BaseCallout type="tip" title="学习提示">内容</BaseCallout>
+已生成 gen-batch-02。
+
+| 章节 ID | 标题 | 文件 |
+| --- | --- | --- |
+| c02-01 | 证券账户、资金账户与适当性 | course/02-trading/accounts-suitability.md |
+
+术语：本批 first_terms 已按规则首次解释；前序术语已使用 `<Term id="..." />` 引用。
+组件：仅使用本批声明组件。
+图表：仅使用声明的 chart_slots。
 ```
 
-不需要 import 语句，不需要 `<script setup>` 块。
+不要在最终回复中粘贴完整章节正文，除非用户明确要求预览。
 
-## 第四步：批次汇总
+## 常见触发示例
 
-所有章节生成完毕后，输出批次汇总：
+用户输入：
 
-### 4.1 生成报告
-
-```markdown
-## 批次生成报告：{batch_id}
-
-### 章节清单
-| 章节 ID | 标题 | 文件路径 | 字数 | 新术语数 |
-|---------|------|----------|------|----------|
-| ... | ... | ... | ... | ... |
-
-### 新增术语清单
-（glossary.yaml 中尚未定义的术语，需要补充到术语表）
-
-### 组件使用统计
-| 组件 | 使用次数 | 使用章节 |
-|------|----------|----------|
-| ... | ... | ... |
-
-### 潜在问题
-（术语重复定义、组件未声明、图表超额等）
+```txt
+生成 gen-batch-03
 ```
 
-### 4.2 术语增量补丁
+行为：
 
-检查当前批次生成的所有正文，为 glossary.yaml 生成增量补丁。
+1. 读取 `batch-plan.yaml` 中 `gen-batch-03`
+2. 生成 c03-01 到 c04-05
+3. 只解释该批各章 `first_terms`
+4. 写入 `course/**/*.md`
+5. 校验并汇报
 
-每个新术语需要给出：
-- id
-- name
-- category
-- difficulty
-- description
-- aliases
-- prerequisites
+用户输入：
 
-规则：
-- 只输出增量，不重写整份 glossary
-- 如果术语已存在，只输出需要修订的字段
-- 不要新增与当前课程目标无关的术语
-
-### 4.3 更新 VitePress 侧边栏
-
-新批次章节生成完毕后，需要更新 `docs/.vitepress/config.mts` 中的 sidebar 配置，将新章节添加到对应的侧边栏分组。
-
-侧边栏按模块（module）分组，每组对应 `course-map.yaml` 中的一个 module：
-
-```typescript
-sidebar: {
-  '/course/': [
-    {
-      text: '第X部分：模块标题',
-      collapsed: false,  // 当前激活批次设为 false
-      items: [
-        { text: '章节标题', link: '/course/xx-xxx/chapter-slug' },
-        // ...
-      ]
-    }
-  ]
-}
+```txt
+写 c07-02 这一章
 ```
 
-规则：
-- 刚生成的批次，其对应侧边栏分组设为 `collapsed: false`（默认展开）
-- 之前已完成的批次，设为 `collapsed: true`（默认折叠）
-- 只添加已生成正文的章节链接，未生成的章节不要出现在侧边栏中
-- sidebar 的 `text` 使用 course-map.yaml 中对应 module 的 `title` 或 batch 的 `batch_title`
+行为：
+
+1. 读取 `course-map.yaml#c07-02`
+2. 检查前置章节 c07-01
+3. 只解释 `pe`、`pb`、`relative-valuation`、`ps`、`pcf`、`peg`、`forward-pe`
+4. 已出现术语使用 `<Term id="..." />`
+5. 写入 `/course/07-valuation/multiple-valuation.md`
+
+用户输入：
+
+```txt
+继续下一批
+```
+
+行为：
+
+1. 检查 `course/**/*.md`
+2. 找到最早未完成的 `gen-batch`
+3. 生成该批次
+4. 更新导航并汇报

@@ -1,0 +1,110 @@
+---
+chapter_id: c07-02
+title: "PE、PB、PS、PCF与PEG"
+module_id: m07
+batch: batch-07
+difficulty: intermediate
+first_terms: [pe, pb, relative-valuation, ps, pcf, peg, forward-pe]
+prerequisite_chapters: [c07-01]
+components_used: [InvestTerm, VizFormula, BaseCompareMatrix]
+chart_slots: [valuation-multiple-formulas]
+---
+
+## 本章目标
+
+掌握五种常用估值倍数（PE、PB、PS、PCF、PEG）的计算逻辑、适用场景和局限，理解相对估值的比较方法。
+
+## 相对估值：和同类比一比
+
+<InvestTerm id="relative-valuation" term="相对估值" mode="tooltip" />
+
+**相对估值**是通过 PE、PB、PS 等估值倍数与可比对象比较来判断估值水平的方法。它的逻辑不是算出一只股票"值多少钱"，而是看它和同行/历史相比"是贵还是便宜"。
+
+相对估值的关键要素：
+
+- **可比对象**：同行业、类似规模的公司
+- **历史比较**：同一家公司过去几年的估值区间
+- **多指标交叉**：不要只看 PE，用 2-3 个估值倍数互相印证
+
+## 五大估值倍数
+
+<InvestTerm id="pe" term="PE" mode="tooltip" />
+
+**PE**（市盈率）= 股价 ÷ <InvestTerm id="eps" term="每股收益" /> = 总 <InvestTerm id="market-cap" term="市值" /> ÷ <InvestTerm id="net-profit" term="净利润" />
+
+PE 是最常见的估值指标。市盈率 15 倍的意思是：你以当前价格买入，如果公司利润不变，需要 15 年回本。PE 越低的公司，看起来越"便宜"——但前提是利润真实且可持续。
+
+<VizFormula
+  formula="PE = 股价 / 每股收益 = 总市值 / 净利润"
+  caption="市盈率（PE）的基本计算公式"
+  :variables="[
+    { symbol: '股价', label: '当前市场价格' },
+    { symbol: '每股收益', label: '归属普通股股东的净利润除以总股本（EPS）' }
+  ]"
+/>
+
+<InvestTerm id="forward-pe" term="动态PE" mode="tooltip" />
+
+**动态 PE**（Forward PE）= 股价 ÷ 未来预测的每股收益。普通 PE 用的是过去的利润（<InvestTerm id="ttm" term="TTM" />），动态 PE 用的是分析师对未来利润的预测。动态 PE 更有前瞻性，但依赖预测的准确性。
+
+<InvestTerm id="pb" term="PB" mode="tooltip" />
+
+**PB**（市净率）= 股价 ÷ 每股净资产
+
+PB 适用于资产密集型行业（如银行、地产、钢铁）——这些行业的价值主要体现在资产规模上。PB 小于 1 意味着股价比每股净资产还低——"市值低于账面价值"。
+
+<InvestTerm id="ps" term="PS" mode="tooltip" />
+
+**PS**（市销率）= 总市值 ÷ <InvestTerm id="revenue" term="营业收入" />
+
+PS 适用于那些还没有盈利但已经产生可观收入的公司（如早期的成长型科技公司或生物医药公司）——利润可能为负导致 PE 没有意义，但 PS 仍可以用来衡量市场对每一元收入的估值。
+
+<InvestTerm id="pcf" term="PCF" mode="tooltip" />
+
+**PCF**（市现率）= 总市值 ÷ <InvestTerm id="operating-cash-flow" term="经营现金流" />
+
+PCF 用现金流代替利润作为分母——现金比利润难操控，PCF 在一定程度上过滤了会计处理的噪音。
+
+<InvestTerm id="peg" term="PEG" mode="tooltip" />
+
+**PEG** = PE ÷ 净利润增长率（%）
+
+PEG 把估值和增长率结合在一起来看。比如：一家公司 PE 为 30 倍，预期净利润年增长 30%——PEG = 1.0，可以认为是估值大致匹配增长。PEG 大于 2 通常被视为估值过高，PEG 小于 1 被视为估值偏低——这只是一个经验参考而非绝对标准。
+
+## 估值倍数对比
+
+<BaseCompareMatrix
+  caption="PE、PB、PS、PCF、PEG 的适用场景和核心局限"
+  :columns="[
+    { key: 'pe', label: 'PE' },
+    { key: 'pb', label: 'PB' },
+    { key: 'ps', label: 'PS' },
+    { key: 'pcf', label: 'PCF' },
+    { key: 'peg', label: 'PEG' }
+  ]"
+  :rows="[
+    { key: 'formula', label: '核心公式', values: { pe: '股价÷每股收益', pb: '股价÷每股净资产', ps: '总市值÷营收', pcf: '总市值÷经营现金流', peg: 'PE÷盈利增长率' } },
+    { key: 'best-for', label: '最适用于', values: { pe: '盈利稳定的一般行业', pb: '银行、地产等重资产行业', ps: '亏损但有收入的成长公司', pcf: '现金流稳定的成熟企业', peg: '有持续增长预期的高估值公司' } },
+    { key: 'weakness', label: '主要局限', values: { pe: '利润为负时无意义，易受非经常损益影响', pb: '不适用于轻资产公司（科技、服务）', ps: '不考虑成本结构和利润率', pcf: '现金流仍有分类调整空间', peg: '增长率预测误差会显著改变 PEG' } },
+    { key: 'red-flag', label: '警惕信号', values: { pe: '高PE+低增长=估值透支', pb: '低PB可能意味着资产质量堪忧', ps: '高PS+亏损=盈利遥遥无期', pcf: 'PCF低但应收款激增', peg: '增长率基于一次性事件而非可持续增长' } }
+  ]"
+/>
+
+## 常见误区
+
+1. **"PE 低就一定划算"**：PE 低可能是因为利润中有大量一次性收益（扣非后利润很低），或者行业处于周期性高点、利润即将下滑（所谓"价值陷阱"）。
+
+2. **"不同行业的 PE 可以直接比较"**：银行 PE 通常在 5-10 倍，科技公司 PE 可能在 30-50 倍——不是因为科技公司"更贵"，而是因为它们的增长模式、资本结构和风险特征完全不同。跨行业比较 PE 没有意义。
+
+3. **"PB 小于 1 就是被低估了"**：如果净资产的账面价值高于其实际变现价值（如存货贬值、应收账款收不回来），PB 小于 1 是合理的而不是"低估"。低 PB 可能是陷阱。
+
+## 本章总结
+
+- **PE** 最常用，但需要关注利润质量和可持续性
+- **PB** 适用于重资产行业，PB < 1 不一定等于便宜
+- **PS** 适用于有收入但无利润的成长公司
+- **PCF** 用现金替代利润，有一定"抗会计修饰"能力
+- **PEG** 把估值和成长速度结合起来——高增长才配得上高 PE
+- **相对估值**通过同行和历史比较来做判断，核心是多指标交叉验证
+
+下一章我们将从相对估值的世界，进入绝对估值的领域——如何用**自由现金流折现模型（DCF）** 直接估算公司的内在价值。

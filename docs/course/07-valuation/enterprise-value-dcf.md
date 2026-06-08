@@ -1,0 +1,135 @@
+---
+chapter_id: c07-03
+title: "企业价值、DCF与绝对估值"
+module_id: m07
+batch: batch-07
+difficulty: advanced
+first_terms: [ev, ebit, ebitda, ev-ebitda, risk-free-rate, equity-risk-premium, discount-rate, dcf, absolute-valuation]
+prerequisite_chapters: [c07-02]
+components_used: [InvestTerm, VizFormula, InvestRiskNotice]
+chart_slots: [dcf-flow]
+---
+
+## 本章目标
+
+理解企业价值（EV）、EBIT/EBITDA 等超越净利润的盈利指标、DCF（现金流折现）的基本逻辑、折现率的含义，以及绝对估值与相对估值的关系。
+
+<BaseCallout type="note" title="本章难度提示">
+本章涉及"折现"等金融基础概念，属于进阶内容。作为新手，理解 DCF 的核心思想和关键局限比掌握精确计算更重要。不需要第一次就完全理解所有细节。
+</BaseCallout>
+
+## 企业价值：不仅看股权，还要看债务
+
+<InvestTerm id="ev" term="企业价值" mode="tooltip" />
+
+**企业价值**（Enterprise Value，EV）是综合考虑股权价值、债务和现金后的企业整体价值指标。上一章学的 <InvestTerm id="pe" term="PE" /> 和 <InvestTerm id="pb" term="PB" /> 都只衡量股权部分的价值（通过 <InvestTerm id="market-cap" term="市值" />），但企业的融资结构有两种——股权和债务。
+
+> EV = 市值 + 总债务 - 现金及等价物
+
+为什么要把债务加回去、现金扣掉？假设你买下整家公司：你既要支付买股权的钱（市值），也要承担公司的债务（需要还），但你可以把公司的现金拿来抵掉一部分。EV 衡量的就是这个"全资收购"的总成本。
+
+<InvestTerm id="ebit" term="EBIT" mode="tooltip" />
+
+**EBIT**（息税前利润）= <InvestTerm id="net-profit" term="净利润" /> + 所得税 + 利息支出。EBIT 把税和利息的影响剔除，让你看到公司**纯粹的经营盈利能力**——不受资本结构和税率的干扰。
+
+<InvestTerm id="ebitda" term="EBITDA" mode="tooltip" />
+
+**EBITDA**（息税折旧摊销前利润）= EBIT + 折旧 + 摊销。折旧和摊销是非现金的会计费用——公司并没有真的掏出这笔钱。加上它们后，EBITDA 更接近公司实际产生的**经营现金收益**。
+
+<InvestTerm id="ev-ebitda" term="EV/EBITDA" mode="tooltip" />
+
+**EV/EBITDA** = 企业价值 ÷ EBITDA，是 PE 的"升级版"。它用企业价值代替市值（考虑了负债）、用 EBITDA 代替净利润（过滤了资本结构和会计处理差异）。在跨国、跨行业比较中，EV/EBITDA 往往比 PE 更有可比性。
+
+<InvestMetricBadge
+  label="EV/EBITDA 示例"
+  value="EV 200亿 ÷ EBITDA 20亿 = 10倍"
+  tone="neutral"
+  trend="unknown"
+/>
+
+## 绝对估值：不跟别人比，直接算价值
+
+<InvestTerm id="absolute-valuation" term="绝对估值" mode="tooltip" />
+
+**绝对估值**是直接估算资产内在价值的方法，不依赖于与可比对象的横向比较。相对估值问的是"相比同行贵不贵"，绝对估值问的是"公司本身值多少钱"。
+
+最经典的绝对估值方法是 DCF——现金流折现法。
+
+<InvestTerm id="dcf" term="DCF" mode="tooltip" />
+
+**DCF**（Discounted Cash Flow，现金流折现法）是通过将未来现金流折现到当前来估算内在价值的方法。它的核心思想很简单：
+
+1. 一家公司的价值等于它**未来能产生的全部现金**
+2. 但"未来的 100 元"不等于"今天的 100 元"——因为钱有时间价值（今天的钱可以投资产生收益）
+3. 所以要把未来的每一笔现金流，用一个"折现率"换算成今天的价值
+4. 把所有折现后的未来现金流加总——这就是 DCF 模型估算出的内在价值
+
+<VizProcessFlow
+  aria-label="DCF 现金流折现的基本流程"
+  :steps="[
+    { id: 'forecast', title: '预测未来自由现金流', description: '基于历史趋势和合理假设，预测未来 5-10 年的自由现金流' },
+    { id: 'discount', title: '确定折现率', description: '综合无风险利率和股权风险溢价，计算适用的折现率' },
+    { id: 'calculate', title: '折现每笔现金流', description: '将未来每一年预测的现金流按折现率换算为当前价值' },
+    { id: 'sum', title: '加总得到内在价值', description: '将所有折现后的未来现金流相加，得出公司的内在价值估算' },
+    { id: 'compare', title: '与市场价格比较', description: '内在价值 > 当前市价 → 可能存在低估（安全边际）' }
+  ]"
+/>
+
+## 折现率：未来的钱打几折
+
+<InvestTerm id="discount-rate" term="折现率" mode="tooltip" />
+
+**折现率**是将未来现金流转换为当前价值时使用的收益率或资本成本。折现率越高，未来的钱在今天就越不值钱——高折现率意味着对未来的不确定性收取更高的"折扣"。
+
+<InvestTerm id="risk-free-rate" term="无风险利率" mode="tooltip" />
+
+**无风险利率**是理论上不承担信用风险的基础收益率，通常用国债收益率来近似。如果一个国家的国债年收益率是 3%，那么理论上任何投资的预期收益都应该高于 3%——否则你不如直接买国债。
+
+<InvestTerm id="equity-risk-premium" term="股权风险溢价" mode="tooltip" />
+
+**股权风险溢价**（ERP）是投资股票相对于无风险资产所要求的额外预期收益。为什么投资股票需要"溢价"？因为股票有风险——公司可能亏损、市场可能大跌。投资者需要一笔"风险补偿"才愿意从安全资产转移到股票中。
+
+折现率的简化理解：
+
+> 折现率 ≈ 无风险利率 + 股权风险溢价（通常在 8%-12% 之间）
+
+<InvestRiskNotice kind="valuation" level="high" market="CN-A" asset-class="stock" title="DCF 估值依赖假设的提示" />
+
+## DCF 的局限
+
+<VizFormula
+  formula="内在价值 = Σ (第n年的自由现金流 ÷ (1 + 折现率)ⁿ)"
+  caption="DCF 的内在价值简化公式"
+  :variables="[
+    { symbol: '自由现金流', label: '公司未来每年可自由支配的现金（预测值）' },
+    { symbol: '折现率', label: '无风险利率 + 股权风险溢价，通常在 8%-12%' },
+    { symbol: 'n', label: '未来的年份' }
+  ]"
+/>
+
+DCF 理论逻辑清晰，但在实践中存在巨大挑战：
+
+- **增长率假设敏感**：对未来的增长率做 1% 的调整，内在价值可能变化 20%+
+- **折现率假设敏感**：折现率变动同样驱动估值大幅变化
+- **终端价值权重过大**：预测期之后的"永续价值"往往占总估值的 50%-70%
+
+正因为这些原因，DCF 不是用来算出"精确价格"的工具，而是用来做**情景分析**——"在最乐观/最悲观/最可能的假设下，价值大概是多少？"
+
+## 常见误区
+
+1. **"绝对估值比相对估值更高级"**：两种方法各有局限。相对估值更贴近市场定价的逻辑但忽略了内在价值的独立性。成熟的分析者往往两者并用——DCF 给出内在价值的参考区间，相对估值告诉你市场在用什么逻辑定价。
+
+2. **"算出内在价值 = 知道什么时候买"**：内在价值是一个区间而不是一个点。即使你的分析合理，市场价格可能需要很长时间才会向内在价值回归——在这个过程中你可能要承受很大的浮动亏损。
+
+3. **"折现率越高越保守"**：用更高折现率确实更保守（内在价值算出来更低），但也可能让你错过很多投资机会。合理的做法是使用市场共识范围内的折现率，然后在安全边际上做保护。
+
+## 本章总结
+
+- **EV（企业价值）**把负债和现金也纳入考量，比只看市值更全面
+- **EBITDA**剔除了资本结构和折旧摊销的干扰，便于跨公司比较
+- **EV/EBITDA**是 PE 的"升级版"，跨国跨行业更具可比性
+- **DCF**是用未来现金流折现来计算内在价值，理论清晰但假设敏感
+- **折现率** = 无风险利率 + 股权风险溢价，反映"未来的钱打几折"
+- 绝对估值和相对估值各有所长，实际分析中应结合使用
+
+"估值"模块到此结束。接下来的两章我们将从个股估值切换到更宏大的视角——**宏观经济和市场周期**如何影响股市。

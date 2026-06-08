@@ -1,0 +1,39 @@
+{
+  "skill_name": "generate-chapter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "按 batch-plan.yaml 生成 gen-batch-02 的全部章节正文，不要改动规划文件。",
+      "expected_output": "读取 batch-plan.yaml、course-map.yaml、chapter-spec-index.yaml、glossary.yaml、component-spec.md，生成 c02-01 到 c02-08 的 Markdown 文件；术语首次解释与后续 <Term id=\"...\" /> 引用符合规划；只使用声明组件和图表槽位。",
+      "files": [
+        "batch-plan.yaml",
+        "course-map.yaml",
+        "chapter-spec-index.yaml",
+        "glossary.yaml",
+        "component-spec.md"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "写 c07-02 这一章，严格按照现在的术语和图表规则。",
+      "expected_output": "只生成 /course/07-valuation/multiple-valuation.md；只解释 c07-02 的 first_terms；前序术语只用 <Term id=\"...\" />；使用 VizFormula 或声明组件，不给出具体买卖建议。",
+      "files": [
+        "course-map.yaml",
+        "chapter-spec-index.yaml",
+        "glossary.yaml",
+        "component-spec.md"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "继续生成下一批还没生成的章节，并更新 VitePress 侧边栏。",
+      "expected_output": "检查现有 course/**/*.md，选择最早未完成 gen-batch；按规划生成该批章节；只把已生成章节加入 .vitepress/config.mts 的 sidebar；输出批次生成报告。",
+      "files": [
+        "batch-plan.yaml",
+        "course-map.yaml",
+        "chapter-spec-index.yaml",
+        ".vitepress/config.mts"
+      ]
+    }
+  ]
+}
