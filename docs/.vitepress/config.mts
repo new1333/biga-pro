@@ -5,6 +5,7 @@ export default defineConfig({
   title: "大A修炼手册",
   description: "A股投资知识 - 从零基础到独立分析、独立决策、独立复盘",
   lang: 'zh-CN',
+  base: '/biga-pro/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
